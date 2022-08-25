@@ -1,0 +1,54 @@
+@charset "UTF-8";
+.logo {
+	width: 60px;
+}
+
+.nav_bg {
+	position: sticky;
+	top: 0;
+	background-color: white;
+	width: 100%;
+}
+
+.nav {
+	display: flex;
+	justify-content: space-between;
+	padding: 20px;
+	margin: 10px 100px;
+}
+
+.list {
+	padding: 20px 100px;
+	margin: 20px 100px;
+}
+
+}
+.a {
+	display: flex;
+	align-items: center;
+}
+
+.b {
+	margin: 0 8px;
+	height: 60%;
+	margin-top: 12px;
+}
+
+.div_center {
+	display: flex;
+	align-content: center;
+	line-height: 100%
+}
+
+.inputBox{
+	margin: 8px;
+	padding: 5px;
+}
+
+.input{
+	width: 400px;
+}
+
+.insertFrm{
+	text-align: center;
+}

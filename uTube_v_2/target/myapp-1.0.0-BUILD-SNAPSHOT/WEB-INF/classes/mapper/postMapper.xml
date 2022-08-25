@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+	<resultMap type="com.topia.myapp.entity.Post" id="post">
+		<result column="POST_ID" property="postId"/>
+		<result column="POST_TITLE" property="postTitle"/>
+		<result column="POST_URL" property="postUrl"/>
+		<result column="POST_CONTENT" property="postContent"/>
+		<result column="REGIST_DATE" property="registDate"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="REGIST_IP" property="registIp"/>
+		<result column="UPDATE_IP" property="updateIp"/>
+		<result column="MEM_ID" property="memId"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="com.topia.myapp.entity.Post">
+		<selectKey keyProperty="postId" resultType="Integer" order="BEFORE">
+			select POST_SEQ.nextval as postId from dual
+		</selectKey>
+		INSERT INTO
+		    post(post_id,post_title,post_url,post_content,regist_date,regist_ip,mem_id)
+		VALUES
+		    (#{postId},#{postTitle},#{postUrl},#{postContent},sysdate,#{registIp},3)
+	</insert>
+</mapper>

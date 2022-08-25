@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="post">
+
+	<resultMap type="com.topia.myapp.entity.Post" id="post">
+		<result column="POST_ID" property="postId"/>
+		<result column="POST_TITLE" property="postTitle"/>
+		<result column="POST_URL" property="postUrl"/>
+		<result column="POST_CONTENT" property="postContent"/>
+		<result column="REGIST_DATE" property="registDate"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="REGIST_IP" property="registIp"/>
+		<result column="UPDATE_IP" property="updateIp"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="HIT" property="hit"/>
+		<result column="URL_ID" property="urlId"/>
+	</resultMap>
+	
+	<resultMap type="com.topia.myapp.entity.PostList" id="plist">
+		<result column="LIKES" property="likes"/>
+		<result column="CMTS" property="cmts"/>
+		<result column="POST_ID" property="postId"/>
+		<result column="POST_TITLE" property="postTitle"/>
+		<result column="POST_URL" property="postUrl"/>
+		<result column="POST_CONTENT" property="postContent"/>
+		<result column="REGIST_DATE" property="registDate"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="REGIST_IP" property="registIp"/>
+		<result column="UPDATE_IP" property="updateIp"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="HIT" property="hit"/>
+		<result column="URL_ID" property="urlId"/>
+		<result column="MEM_NAME" property="memName"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="AUTH" property="auth"/>
+		<result column="IMAGE" property="image"/>
+		<result column="CHANNEL_NAME" property="channelName"/>
+		<result column="FOLLOWERS" property="followers"/>
+	</resultMap>
+	
+	<sql id="search">
+		<if test="keyword != ''">
+	    	<if test="searchType == 'all'">
+		    AND (
+		 		p.post_title LIKE '%'||#{keyword}||'%'
+		 		OR
+		 		p.post_content LIKE '%'||#{keyword}||'%'
+		 		OR
+		 		m.mem_name LIKE '%'||#{keyword}||'%'
+		 		)
+	    	</if>
+	    	<if test="searchType == 'ticon'">
+	    	AND (
+		 		p.post_title LIKE '%'||#{keyword}||'%'
+		 		OR
+		 		p.post_content LIKE '%'||#{keyword}||'%'
+		 		)
+	    	</if>
+	    	<if test="searchType == 'title'">
+	    	AND (
+		 		p.post_title LIKE '%'||#{keyword}||'%'
+		 		)
+	    	</if>
+	    	<if test="searchType == 'content'">
+	    	AND (
+		 		p.post_content LIKE '%'||#{keyword}||'%'
+		 		)
+	    	</if>
+	    	<if test="searchType == 'uploader'">
+	    	AND (
+		 		m.mem_name LIKE '%'||#{keyword}||'%'
+		 		)
+	    	</if>
+	    </if>
+	</sql>
+	
+	
+	<delete id="delete" parameterType="Integer">
+		DELETE post
+		WHERE
+		    post_id=#{postId}
+	</delete>
+	
+	<update id="increaseHit" parameterType="Integer">
+		UPDATE post
+		SET
+		    hit=hit+1
+		WHERE
+		    post_id=#{postId}
+	</update>
+	
+	<update id="updatePost" parameterType="com.topia.myapp.entity.Post">
+		UPDATE post
+		SET
+		    post_title=#{postTitle},
+		    post_url=#{postUrl},
+		    post_content=#{postContent},
+		    update_date=sysdate,
+		    update_ip=#{updateIp},
+		    url_id=#{urlId}
+		WHERE
+		    post_id=#{postId}
+	</update>
+	
+	<insert id="insert" parameterType="com.topia.myapp.entity.Post">
+		<selectKey keyProperty="postId" resultType="Integer" order="BEFORE">
+			select POST_SEQ.nextval as postId from dual
+		</selectKey>
+		INSERT INTO post(
+	    	post_id,
+	    	post_title,
+	    	post_url,
+	    	post_content,
+	    	regist_date,
+	    	regist_ip,
+	    	mem_id,
+	    	hit,
+	    	url_id
+	    	)
+		VALUES (
+	    	#{postId},
+	    	#{postTitle},
+	    	#{postUrl},
+	    	#{postContent},
+	    	sysdate,
+	    	#{registIp},
+	    	#{memId},
+	    	0,
+	    	#{urlId}
+	    	)
+	</insert>
+	
+	<select id="getPost" resultMap="plist" parameterType="Integer">
+		SELECT
+		    p.post_id,
+		    p.post_title,
+		    p.post_url,
+		    p.post_content,
+		    p.regist_date,
+		    p.update_date,
+		    p.regist_ip,
+		    p.update_ip,
+		    p.hit,
+		   	p.url_id,
+		    m.mem_id,
+		    m.mem_name,
+		    m.password,
+		    m.auth,
+		    m.image,
+		    m.channel_name,
+		    (
+		    SELECT 
+		    	COUNT(follow_id) 
+		    FROM 
+		    	follow 
+		    WHERE 
+		    	followed=m.mem_id
+		    ) followers
+		FROM
+		    post p, member m
+		WHERE
+		    p.mem_id = m.mem_id
+		    AND
+		    p.post_id = #{postId}
+	</select>
+	
+	<select id="postsList" resultMap="plist" parameterType="HashMap">
+		SELECT
+			likes,
+			cmts,
+			post_id,
+		    post_title,
+		    post_url,
+		    post_content,
+		    regist_date,
+		    update_date,
+		    regist_ip,
+		    update_ip,
+		    hit,
+		   	url_id,
+		    mem_id,
+		    mem_name,
+		    password,
+		    auth,
+		    image,
+		    channel_name
+		FROM
+		    (
+		    SELECT
+					ROWNUM AS rn,
+					A.*
+				FROM
+					(
+					
+						SELECT 
+					        (SELECT COUNT(like_id) FROM like_up WHERE post_id=p.post_id) likes,
+					        (SELECT COUNT(cmt_id) FROM cmt WHERE post_id=p.post_id) cmts,
+					        p.post_id,
+					        p.post_title,
+					        p.post_url,
+					        p.post_content,
+					        p.regist_date,
+					        p.update_date,
+					        p.regist_ip,
+					        p.update_ip,
+					        p.hit,
+					        p.url_id,
+					        m.mem_id,
+					        m.mem_name,
+					        m.password,
+					        m.auth,
+					        m.image,
+					        m.channel_name
+					    FROM
+					        post p, member m
+					    WHERE 
+					        p.mem_id = m.mem_id
+						<include refid="search"></include>
+					    ORDER BY
+					        ${criteria} desc
+					) A
+		    ) B
+		WHERE
+		    rn between #{start} and #{end}
+	</select>
+	
+	<select id="postsCnt" resultType="Integer" parameterType="HashMap">
+		SELECT
+			count(post_id)
+		FROM
+		    post p, member m
+		WHERE
+		    p.mem_id = m.mem_id
+			<include refid="search"></include>
+	</select>
+	
+	<select id="uploadList" resultMap="post" parameterType="HashMap">
+		SELECT
+			post_id,
+		    post_title,
+		    post_url,
+		    post_content,
+		    regist_date,
+		    update_date,
+		    regist_ip,
+		    update_ip,
+		    hit,
+		   	url_id,
+		    mem_id
+		FROM
+		    (
+		    SELECT
+					ROWNUM AS rn,
+					A.*
+				FROM
+					(
+					SELECT
+						post_id,
+					    post_title,
+					    post_url,
+					    post_content,
+					    regist_date,
+					    update_date,
+					    regist_ip,
+					    update_ip,
+					    hit,
+					   	url_id,
+					    mem_id
+					FROM
+						post
+					WHERE
+						mem_id = #{memId}
+					ORDER BY
+					    post_id desc
+					) A
+		    ) B
+		WHERE
+		    rn between #{start} and #{end}
+	</select>
+	
+	<select id="uploadCnt" resultType="Integer" parameterType="Integer">
+		SELECT
+			COUNT(post_id)
+		FROM
+			post
+		WHERE
+			mem_id = #{memId}
+	</select>
+	
+	<select id="recommendsList" resultMap="plist" parameterType="HashMap">
+		SELECT
+			post_id,
+		    post_title,
+		    post_url,
+		    post_content,
+		    regist_date,
+		    update_date,
+		    regist_ip,
+		    update_ip,
+		    hit,
+		   	url_id,
+		    mem_id,
+		    mem_name,
+		    password,
+		    auth,
+		    image,
+		    channel_name
+		FROM
+		    (
+		    SELECT
+					ROWNUM AS rn,
+					A.*
+				FROM
+					(
+					SELECT 
+					    p.post_id,
+					    p.post_title,
+					    p.post_url,
+					    p.post_content,
+					    p.regist_date,
+					    p.update_date,
+					    p.regist_ip,
+					    p.update_ip,
+					    p.hit,
+					   	p.url_id,
+					    m.mem_id,
+					    m.mem_name,
+					    m.password,
+					    m.auth,
+					    m.image,
+					    m.channel_name
+					FROM
+					    post p, member m
+					WHERE
+					    p.mem_id = m.mem_id
+				    <if test="postId != null">
+				    AND 
+				    	p.post_id != #{postId}
+				    </if>
+					ORDER BY
+					    post_id desc
+					) A
+		    ) B
+		WHERE
+		    rn between #{start} and #{end}
+	</select>
+	
+	<select id="recommendsCnt" resultType="Integer" parameterType="HashMap">
+		SELECT
+			count(post_id)
+		FROM
+			post
+		<if test="postId != null">
+		 WHERE 
+		 	post_id != #{postId}
+		</if>
+	</select>
+	
+</mapper>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cmt">
+
+	<resultMap type="com.topia.myapp.entity.Cmt" id="cmt">
+		<result column="CMT_ID" property="cmtId"/>
+		<result column="CMT_CONTENT" property="cmtContent"/>
+		<result column="REGIST_DATE" property="registDate"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="REGIST_IP" property="registIp"/>
+		<result column="UPDATE_IP" property="updateIp"/>
+		<result column="CMT_REF" property="cmtRef"/>
+		<result column="CMT_STEP" property="cmtStep"/>
+		<result column="CMT_LEVEL" property="cmtLevel"/>
+		<result column="POST_ID" property="postId"/>
+		<result column="MEM_ID" property="memId"/>
+	</resultMap>
+	
+	<resultMap type="com.topia.myapp.entity.CmtList" id="clist">
+		<result column="CMT_ID" property="cmtId"/>
+		<result column="CMT_CONTENT" property="cmtContent"/>
+		<result column="POST_ID" property="postId"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="REGIST_DATE" property="registDate"/>
+		<result column="UPDATE_DATE" property="updateDate"/>
+		<result column="REGIST_IP" property="registIp"/>
+		<result column="UPDATE_IP" property="updateIp"/>
+		<result column="CMT_REF" property="cmtRef"/>
+		<result column="CMT_STEP" property="cmtStep"/>
+		<result column="CMT_LEVEL" property="cmtLevel"/>
+		<result column="MEM_NAME" property="memName"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="AUTH" property="auth"/>
+		<result column="IMAGE" property="image"/>
+		<result column="CHANNEL_NAME" property="channelName"/>
+	</resultMap>
+	
+	<delete id="deleteCmt" parameterType="Integer">
+		DELETE cmt
+		WHERE
+		    cmt_id=#{cmtId}
+	</delete>
+	
+	<update id="updateCmt" parameterType="com.topia.myapp.entity.Cmt">
+		UPDATE cmt
+		SET
+		    cmt_content=#{cmtContent},
+		    update_date=sysdate,
+		    update_ip=#{updateIp}
+		WHERE
+		    cmt_id=#{cmtId}
+	</update>
+	
+	<update id="plusStep" parameterType="HashMap">
+		UPDATE cmt
+		SET
+			cmt_step=cmt_step+1
+		WHERE
+		    cmt_ref=#{cmtRef}
+		AND
+			cmt_step>#{cmtStep}
+	</update>
+	
+	<select id="getMaxStep" resultType="Integer" parameterType="HashMap">
+		SELECT 
+		    max(cmt_step)
+		FROM 
+		    cmt
+		WHERE 
+		    cmt_ref=#{cmtRef}
+		AND 
+			cmt_level=#{cmtLevel}
+	</select>
+	
+	<select id="checkStep" resultType="Integer" parameterType="HashMap">
+		SELECT 
+		    count(cmt_id)
+		FROM 
+		    cmt
+		WHERE
+			cmt_ref=#{cmtRef}
+		AND
+		    cmt_step=#{cmtStep}
+		AND
+		    cmt_level=#{cmtLevel}
+	</select>
+	
+	<insert id="insert" parameterType="com.topia.myapp.entity.Cmt">
+		<selectKey keyProperty="cmtId" resultType="Integer" order="BEFORE">
+			select CMT_SEQ.nextval as cmtId from dual
+		</selectKey>
+		INSERT INTO cmt(
+	    	cmt_id,
+	    	cmt_content,
+	    	post_id,
+		    mem_id,
+	    	regist_date,
+	    	regist_ip,
+	    	cmt_ref,
+	    	cmt_step,
+	    	cmt_level
+	    	)
+		VALUES (
+	    	#{cmtId},
+	    	#{cmtContent},
+	    	#{postId},
+	    	#{memId},
+	    	sysdate,
+	    	#{registIp},
+	    	<choose>
+	    		<when test="cmtRef==0">
+		    	#{cmtId},
+	    		</when>
+	    		<otherwise>
+	    		#{cmtRef},
+	    		</otherwise>
+	    	</choose>
+	    	#{cmtStep},
+	    	#{cmtLevel}
+	    	)
+	</insert>
+	
+	<select id="getCmt" resultMap="clist" parameterType="Integer">
+		SELECT 
+		    c.cmt_id,
+		    c.cmt_content,
+		    c.regist_date,
+		    c.update_date,
+		    c.regist_ip,
+		    c.update_ip,
+		    c.cmt_ref,
+		    c.cmt_step,
+		    c.cmt_level,
+		    m.mem_id,
+		    m.mem_name,
+		    m.password,
+		    m.auth,
+		    m.image,
+		    m.channel_name,
+		    c.post_id
+		FROM
+		    cmt c, member m
+		WHERE
+		    c.mem_id = m.mem_id
+        AND
+            cmt_id = #{cmtId}
+	</select>
+	
+	<select id="listCmt" resultMap="clist" parameterType="HashMap">
+		SELECT
+			cmt_id,
+		    cmt_content,
+		    regist_date,
+		    update_date,
+		    regist_ip,
+		    update_ip,
+		    cmt_ref,
+		    cmt_step,
+		    cmt_level,
+		    mem_id,
+		    mem_name,
+		    password,
+		    auth,
+		    image,
+		    channel_name,
+		    post_id
+		FROM
+		    (
+		    SELECT
+					ROWNUM AS rn,
+					A.*
+				FROM
+					(
+					SELECT 
+					    c.cmt_id,
+					    c.cmt_content,
+					    c.regist_date,
+					    c.update_date,
+					    c.regist_ip,
+					    c.update_ip,
+					    c.cmt_ref,
+					    c.cmt_step,
+					    c.cmt_level,
+					    m.mem_id,
+					    m.mem_name,
+					    m.password,
+					    m.auth,
+					    m.image,
+					    m.channel_name,
+					    c.post_id
+					FROM
+					    cmt c, member m
+					WHERE
+					    c.mem_id = m.mem_id
+			        AND
+			            c.post_id = #{postId}
+					ORDER BY
+					    c.cmt_ref, c.cmt_step
+					) A
+		    ) B
+		WHERE
+		    rn between #{start} and #{end}
+	</select>
+	
+	<select id="listCnt" resultType="Integer" parameterType="Integer">
+		SELECT
+			count(cmt_id)
+		FROM
+			cmt
+		WHERE
+			post_id=#{postId}
+	</select>
+	
+	
+</mapper>

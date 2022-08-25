@@ -1,0 +1,458 @@
+@charset "UTF-8";
+
+:root {
+	/* Color */
+	--white-color: #fff; 
+	--black-color: #140a00; 
+	--red-color: #ff0000; 
+	--dark-grey-color: #909090; 
+	--light-grey-color: #e0e0e0; 
+	--btn-grey-color: #7F8487; 
+	--pink-color: #F2D1D1; 
+	--orange-color: #FFDBA4; 
+	--yellow-color: #FFE9AE; 
+	--blue-color: #DAEAF1;
+	/* Size */ 
+	--size-sm: 10px; 
+	--size-md: 13px; 
+	--size-lg: 18px; 
+	--avatar-size: 36px;
+	/* Font Size */ 
+	--font-main: 48px; 
+	--font-big: 30px; 
+	--font-xlarge: 20px; 
+	--font-large: 18px; 
+	--font-medium: 14px; 
+	--font-small: 12px; 
+	--font-micro: 10px;
+}
+
+/* 애니메이션 */
+#postList, table.table, .container {
+    animation: fadeOut 1s linear;
+}
+
+@keyframes fadeOut {   
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  } 
+}
+
+/* 공통 CSS start */
+a {
+	text-decoration: none;
+	color: black;
+}
+
+ul {
+	list-style: none;
+}
+.active{
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.i-active{
+	color: #4D96FF;
+}
+
+.annotation{
+	color: grey;	
+}
+th, td {
+  vertical-align : top;
+}
+
+.input{
+	width: 100%;
+}
+.input-box{
+	width: 70%;
+	margin: var(--size-md);
+}
+
+.input-box2{
+	width: 45%;
+	margin: var(--size-md);
+}
+
+.profile-img{
+	border: solid 8px var(--light-grey-color); 
+	padding: 5px; 
+	margin: 18px;
+	border-radius: 50%
+}
+
+.m-0 {
+	margin: 0px;
+}
+
+.p-0 {
+	padding: 0px;
+}
+
+.w-100{
+	width: 100%;
+}
+.w-50{
+	width: 50%;
+}
+.w-70{
+	width: 70%;
+}
+.w-30{
+	width: 30%;
+}
+
+.x-center {
+	display: flex;
+	justify-content: space-between;
+}
+
+.y-center {
+	display: flex;
+	align-items: center;
+}
+
+.vertical-center {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.right-align {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.left-align {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.mybtn1 {
+	background-color: var(--orange-color);
+	margin: 0px 3px;
+}
+.mybtn2 {
+	background-color: var(--blue-color);
+	margin: 0px 3px;
+	color: var(--btn-grey-color);
+}
+.mybtn3 {
+	background-color: var(--yellow-color);
+	margin: 0px 3px;
+}
+
+.btn-box {
+	display: flex;
+	justify-content: space-between;
+}
+
+.no-data {
+	text-align: center;
+	width: 100%;
+	background-color: var(--light-grey-color);
+}
+
+#thumbnail{
+	span: 15px;
+}
+
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	max-height: 250px;
+	max-width: 350px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {
+	background-color: #f1f1f1
+}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {
+	display: block;
+}
+/* 공통 CSS end */
+
+/* home CSS start */
+.main-logo {
+	background-color: var(--pink-color);
+	height: 250px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: var(--font-main);
+}
+.mycard {
+	border: 1px solid lightgrey;
+	padding: 0px;
+	margin: 10px;
+	width: 100%;
+	height: 100%;
+}
+.mycard .top {
+	width: 100%;
+}
+.mycard .title {
+	margin: var(--size-sm);
+	font-size: var(--font-medium);
+}
+.mycard .text {
+	margin: var(--size-sm);
+	font-size: var(--font-small);
+	color: var(--dark-grey-color);
+}
+#ChannelList .id{
+	font-size: var(--font-medium);
+	color: var(--dark-grey-color);
+}
+/* home CSS end */
+
+/* menu CSS start */
+.nav-bg {
+	position: sticky;
+	top: 0;
+	background-color: var(--white-color);
+	width: 100%;
+	height: 100px;
+}
+
+.nav {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	padding: var(--padding);
+	margin: 18px 50px;
+}
+
+.big-link {
+	font-size: var(--font-big);
+	margin-right: 10px;
+}
+
+.logo {
+	width: 60px;
+}
+/* menu CSS end */
+
+/* detail CSS start */
+button, button:focus {
+	border: none;
+	cursor: pointer;
+	outline: none;
+	background-color: #00ff0000;
+}
+
+.detail-container {
+	padding: var(--size-sm);
+	margin: var(--size-sm);
+}
+
+.video-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 5px 12px;
+	background-color: black;
+	color: white;
+}
+
+.video-header .icons .fa-search {
+	margin-right: 5px;
+}
+
+.video-info .title{
+	font-size: var(--font-large);
+	padding: 5px 0px;
+}
+.video-info .info{
+	font-size: var(--font-medium);
+	color: var(--dark-grey-color);
+	padding: 5px 0px;
+}
+
+.video-info .actions {
+	font-size: var(--font-medium);
+	margin-top: var(--size-lg);
+	padding: 0px;
+	display: flex;
+	justify-content: space-around;
+}
+
+.actions button {
+	display: flex;
+	flex-direction: column;
+	margin: 0px 0px;
+	color: darkgrey;
+}
+
+.actions button i {
+	margin: 0 auto;
+	margin-bottom: var(--size-sm);
+	font-size: 20px;
+}
+
+
+
+.channel {
+	display: flex;
+	justify-content: space-between;
+	border-top: 1px solid lightgrey;
+	border-bottom: 1px solid lightgrey;
+}
+
+.channel .uploader {
+	display: flex;
+	align-items: center;
+}
+
+.channel .uploader img {
+	width: 55px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.channel .uploader .info {
+	padding-left: 3px;
+	color: black;
+	display: flex;
+	flex-direction: column;
+}
+
+.channel .uploader .info .subscribers {
+	font-size: var(--font-small);
+	color: darkgrey;
+}
+
+.channel .subscribe {
+	color: red;
+}
+
+.cmtList {
+	margin: 0px;
+	padding: 0px;
+	display: flex;
+	flex-direction: column;
+}
+
+.cmtList .cmtItem {
+	padding: 20px 0px;
+	display: flex;
+	border-bottom: solid 1px lightgrey;
+}
+
+.cmtList .cmtItem .cmt-img {
+	flex: 1 1 10%;
+}
+
+.cmtList .cmtItem .cmt-img img {
+	width: 80%;
+	border-radius: 50%;
+}
+
+.cmtList .cmtItem .cmt-info {
+	flex: 1 1 90%;
+	display: flex;
+	flex-direction: column;
+}
+
+.cmtList .cmtItem .cmt-info .info-top {
+	display: flex;
+	justify-content: space-between;
+}
+
+#cmtDelete, #cmtUpdate, #cmtReplyBtn, #cmtLikeBtn, .dropdownBtn, .page{
+	cursor: pointer;
+}
+.cmtText {
+	width: 70%;
+}
+
+.cmtSaveBox {
+	font-size: 0.9em;
+	color: grey;
+	display: flex;
+	align-items: center;
+}
+
+.cmtSaveBox .span {
+	margin-left: 5px;
+}
+
+.list-container ul{
+	padding: 0px;
+}
+.listTitle {
+	font-size: 1.1em;
+	color: grey;
+	margin-bottom: 8px;
+}
+
+.item {
+	display: flex;
+	marin: 3px 0px;
+}
+
+.item .item-img {
+	flex: 1 1 43%;
+}
+
+.item .item-img img {
+	width: 100%;
+}
+
+.item .item-info {
+	flex: 1 1 52%;
+	padding: 0px 0px 15px 8px;
+}
+
+.item .moreBtn {
+	flex: 1 1 5%;
+}
+
+.item .item-info {
+	display: flex;
+	flex-direction: column;
+}
+
+.item .item-info .item-title {
+	font-size: 1em;
+}
+
+.item .item-info .item-desc {
+	font-size: 0.8em;
+}
+
+/* detail CSS end*/
+
+/* post/insert CSS start*/
+.insert-logo{
+	height: 150px; 
+	width: 100%; 
+	display: flex; 
+	flex-direction: column; 
+	align-items: center;
+}
+/* post/insert CSS end*/
+

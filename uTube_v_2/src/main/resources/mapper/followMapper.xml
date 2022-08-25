@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="follow">
+
+	<resultMap type="com.topia.myapp.entity.Follow" id="follow">
+		<result column="FOLLOW_ID" property="followId"/>
+		<result column="FOLLOWER" property="follower"/>
+		<result column="FOLLOWED" property="followed"/>
+		<result column="FOLLOW_DATE" property="followDate"/>
+	</resultMap>
+	
+	<resultMap type="com.topia.myapp.entity.FollowList" id="flist">
+		<result column="FOLLOW_ID" property="followId"/>
+		<result column="FOLLOWER" property="follower"/>
+		<result column="FOLLOWED" property="followed"/>
+		<result column="FOLLOW_DATE" property="followDate"/>
+		<result column="MEM_NAME" property="memName"/>
+		<result column="PASSWORD" property="password"/>
+		<result column="AUTH" property="auth"/>
+		<result column="IMAGE" property="image"/>
+		<result column="CHANNEL_NAME" property="channelName"/>
+		<result column="FOLLOWERS" property="followers"/>
+	</resultMap>
+	
+	
+	<delete id="followCancel" parameterType="HashMap">
+		DELETE follow
+		WHERE
+		    follower=#{follower}
+		AND
+			followed=#{followed}
+	</delete>
+	
+	<insert id="follow" parameterType="HashMap">
+		<selectKey keyProperty="followId" resultType="Integer" order="BEFORE">
+			select FOLLOW_SEQ.nextval as followId from dual
+		</selectKey>
+		INSERT INTO follow(
+	    	follow_id,
+	    	follower,
+	    	followed,
+	    	follow_date
+	    	)
+		VALUES (
+	    	#{followId},
+	    	#{follower},
+	    	#{followed},
+	    	sysdate
+	    	)
+	</insert>
+	
+	<select id="checkFollow" resultType="Integer" parameterType="HashMap">
+		SELECT 
+		   count(follow_id)
+		FROM
+		    follow
+		WHERE
+		    follower=#{follower}
+		AND
+			followed=#{followed}
+	</select>
+	 
+	<!-- <select id="followedCnt" resultType="Integer" parameterType="HashMap">
+		SELECT
+		    count(follow_id)
+		FROM
+		    follow
+		WHERE
+		    followed = ${followed}
+	</select> -->
+	
+	<select id="followingCnt" resultType="Integer" parameterType="HashMap">
+		SELECT
+		    count(follow_id)
+		FROM
+		    follow
+		WHERE
+		    follower = ${follower}
+	</select>
+	
+	<select id="followingList" resultMap="flist" parameterType="HashMap">
+		SELECT
+			f.follow_id,
+			f.follower,
+			f.followed,
+			f.follow_date,
+		    m.mem_name,
+		    m.password,
+		    m.auth,
+		    m.image,
+		    m.channel_name,
+            (SELECT
+                count(follow_id)
+            FROM
+                follow
+            WHERE
+                followed = f.followed) followers
+		FROM 
+			follow f, member m
+		WHERE 
+			f.followed = m.mem_id 
+		AND 
+			f.follower = #{follower}
+	</select>
+	
+	<select id="followerCnt" resultType="Integer" parameterType="HashMap">
+		SELECT
+		    count(follow_id)
+		FROM
+		    follow
+		WHERE
+		    followed = ${followed}
+	</select>
+	
+	<select id="followerList" resultMap="flist" parameterType="HashMap">
+		SELECT
+			f.follow_id,
+			f.follower,
+			f.followed,
+			f.follow_date,
+		    m.mem_name,
+		    m.password,
+		    m.auth,
+		    m.image,
+		    m.channel_name
+		FROM 
+			follow f, member m
+		WHERE 
+			f.follower = m.mem_id 
+		AND 
+			f.followed = #{followed}
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="like">
+
+	<resultMap type="com.topia.myapp.entity.LikeUp" id="like">
+		<result column="LIKE_ID" property="likeId"/>
+		<result column="POST_ID" property="postId"/>
+		<result column="MEM_ID" property="memId"/>
+	</resultMap>
+	
+	<delete id="likeCancel" parameterType="HashMap">
+		DELETE like_up
+		WHERE
+		    post_id=#{postId}
+		AND
+			mem_id=#{memId}
+	</delete>
+	
+	<insert id="like" parameterType="HashMap">
+		<selectKey keyProperty="likeId" resultType="Integer" order="BEFORE">
+			select LIKE_UP_SEQ.nextval as likeId from dual
+		</selectKey>
+		INSERT INTO like_up(
+	    	like_id,
+	    	post_id,
+	    	mem_id
+	    	)
+		VALUES (
+	    	#{likeId},
+	    	#{postId},
+	    	#{memId}
+	    	)
+	</insert>
+	
+	<select id="checkLike" resultType="Integer" parameterType="HashMap">
+		SELECT 
+		   count(like_id)
+		FROM
+		    like_up
+		WHERE
+		    post_id=#{postId}
+		AND
+			mem_id=#{memId}
+	</select>
+	 
+	<select id="likeCnt" resultType="Integer" parameterType="HashMap">
+		SELECT
+		    count(like_id)
+		FROM
+		    like_up
+		WHERE
+		    post_id = ${postId}
+	</select>
+	
+</mapper>
