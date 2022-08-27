@@ -22,6 +22,7 @@ public class PostList {
 	private String password;
 	private String auth;
 	private String image;
+	private String saveImage;
 	private String channelName;
 	private int followers;
 	@Override
@@ -30,8 +31,8 @@ public class PostList {
 				+ ", postUrl=" + postUrl + ", postContent=" + postContent + ", registDate=" + registDate
 				+ ", registDateStr=" + registDateStr + ", updateDate=" + updateDate + ", registIp=" + registIp
 				+ ", updateIp=" + updateIp + ", memId=" + memId + ", hit=" + hit + ", urlId=" + urlId + ", memName="
-				+ memName + ", password=" + password + ", auth=" + auth + ", image=" + image + ", channelName="
-				+ channelName + ", followers=" + followers + "]";
+				+ memName + ", password=" + password + ", auth=" + auth + ", image=" + image + ", saveImage="
+				+ saveImage + ", channelName=" + channelName + ", followers=" + followers + "]";
 	}
 	public int getLikes() {
 		return likes;
@@ -141,6 +142,12 @@ public class PostList {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	public String getSaveImage() {
+		return saveImage;
+	}
+	public void setSaveImage(String saveImage) {
+		this.saveImage = saveImage;
+	}
 	public String getChannelName() {
 		return channelName;
 	}
@@ -155,8 +162,8 @@ public class PostList {
 	}
 	public PostList(int likes, int cmts, int postId, String postTitle, String postUrl, String postContent,
 			Date registDate, String registDateStr, Date updateDate, String registIp, String updateIp, int memId,
-			int hit, String urlId, String memName, String password, String auth, String image, String channelName,
-			int followers) {
+			int hit, String urlId, String memName, String password, String auth, String image, String saveImage,
+			String channelName, int followers) {
 		super();
 		this.likes = likes;
 		this.cmts = cmts;
@@ -176,6 +183,7 @@ public class PostList {
 		this.password = password;
 		this.auth = auth;
 		this.image = image;
+		this.saveImage = saveImage;
 		this.channelName = channelName;
 		this.followers = followers;
 	}
@@ -183,4 +191,5 @@ public class PostList {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
 }

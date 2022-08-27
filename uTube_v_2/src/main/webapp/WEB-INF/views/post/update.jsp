@@ -16,7 +16,8 @@
 	<div class="container mb-5">
 		<form id="commitFrm" class="text-center" action="./updateSubmit" method="post">
 			<div class="vertical-center">
-			<input type="hidden" name="postId" value="${post.postId }">
+				<input type="hidden" name="postId" value="${post.postId }">
+				<input type="hidden" name="memId" value="${post.memId }">
 				<div class="input-box">
 					<p>제목</p>
 					<input id="postTitle" name="postTitle" class="input form-control" type="text" value="${post.postTitle }">

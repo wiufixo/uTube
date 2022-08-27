@@ -35,7 +35,7 @@
 				<div class="btn-box my-5 py-2">
 					<button id="commitBtn" class="btn mybtn3" type="button">등록</button>
 					<input type="reset" class="btn mybtn3" value="리셋">
-					<a href="./" class="btn mybtn3">취소</a>
+					<a href="${pageContext.request.contextPath}/" class="btn mybtn3">취소</a>
 				</div>
 			</div>
 		</form>

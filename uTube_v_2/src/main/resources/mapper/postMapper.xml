@@ -38,6 +38,7 @@
 		<result column="PASSWORD" property="password"/>
 		<result column="AUTH" property="auth"/>
 		<result column="IMAGE" property="image"/>
+		<result column="SAVE_IMAGE" property="saveImage"/>
 		<result column="CHANNEL_NAME" property="channelName"/>
 		<result column="FOLLOWERS" property="followers"/>
 	</resultMap>
@@ -151,6 +152,7 @@
 		    m.password,
 		    m.auth,
 		    m.image,
+		    m.save_image,
 		    m.channel_name,
 		    (
 		    SELECT 
@@ -187,6 +189,7 @@
 		    password,
 		    auth,
 		    image,
+		    save_image,
 		    channel_name
 		FROM
 		    (
@@ -214,6 +217,7 @@
 					        m.password,
 					        m.auth,
 					        m.image,
+					        m.save_image,
 					        m.channel_name
 					    FROM
 					        post p, member m
@@ -308,6 +312,7 @@
 		    password,
 		    auth,
 		    image,
+		    save_image,
 		    channel_name
 		FROM
 		    (
@@ -332,6 +337,7 @@
 					    m.password,
 					    m.auth,
 					    m.image,
+					    m.save_image,
 					    m.channel_name
 					FROM
 					    post p, member m

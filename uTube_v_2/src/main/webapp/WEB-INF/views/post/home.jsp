@@ -6,14 +6,14 @@
 <head>
 <title>홈</title>
 <jsp:include page="../layout/head.jsp" />
-<style type="text/css">
-
-
-</style>
+<script type="text/javascript">
+const context = "${pageContext.request.contextPath}";
+sessionStorage.setItem("contextpath", context);
+</script>
 </head>
 <body>
 	<jsp:include page="../layout/menu.jsp" />
-	<div class="main-logo">UTube2</div>
+	<div class="main-logo">UTube</div>
 	<div class="p-5">
 		<div class="row">
 			<div <c:if test="${login != null }">class="col-sm-10"</c:if><c:if test="${login != null }">class="col-sm-12"</c:if>>
@@ -62,11 +62,11 @@
 							<div class="listTitle m-0 mt-2">구독채널 ${followingResult.cnt }개</div>
 							<ul class="p-0 py-3">
 								<c:forEach items="${followingResult.list }" var="following">
-									<li class="py-1 my-3 d-flex justify-content-between align-items-center" style="border-bottom: solid 1px lightgrey;">
-										<div class="flex-fill">
-											<img src="${pageContext.request.contextPath}/resources/upload/member/${following.image}" alt="" style="width: 40px;">
+									<li class="py-1 my-3 d-flex align-items-center" style="border-bottom: solid 1px lightgrey;">
+										<div style="padding-right: 12px;">
+											<img src="${pageContext.request.contextPath}/resources/upload/member/${following.saveImage}" alt="" style="width: 40px;">
 										</div>
-										<div class="flex-fill d-flex">
+										<div class="d-flex">
 											<div class="d-flex flex-column">
 												<a href="${pageContext.request.contextPath}/member/detail?memId=${following.followed }">
 													<span>${following.channelName }</span>
@@ -104,8 +104,6 @@
 	<script type="text/javascript">
 		const postsCnt = ${postsCnt};
 		console.log("postsCnt", postsCnt);
-
-		sessionStorage.setItem("contextpath", "${pageContext.request.contextPath}");
 
 		let page = 1;
 		let flag = false;

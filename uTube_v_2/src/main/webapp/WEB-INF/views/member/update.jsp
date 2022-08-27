@@ -12,13 +12,13 @@
 	<jsp:include page="../layout/menu.jsp"></jsp:include>
 	<div class="my-3 pt-5">
 		<h1 class="fs-3">회원정보수정</h1>
-		<img class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.image}" style="width: 150px; border-radius: 50%">
+		<img class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 150px; border-radius: 50%">
 	</div>
 	<div class="container text-center">
 		<form id="updateFrm" class="vertical-center" action="./joinSubmit" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="memId" id="memId" value="${member.memId }">
 			<c:if test="${login.auth == 'MASTER' }">
-				<div class="input-box my-4 w-30">
+				<div class="input-box my-4 w-50">
 					<div class="mb-2">Auth (select)</div>
 					<select name="auth" class="input form-select">
 						<option value="USER" <c:if test="${member.auth == 'USER' }">selected</c:if>>user</option>
@@ -54,7 +54,7 @@
 			<div class="input-box my-4 w-50">
 				<div class="mb-2">Profile Image</div>
 						<label for="uploadFile" id='thumbnail'>
-							<img class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.image}" style="width: 100px; border-radius: 50%">
+							<img class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%">
 						</label> 
 				<div class="d-flex justify-content-between align-items-center row">
 					<div class="my-4 col-md-10">
@@ -87,7 +87,7 @@
 	
 	$("#fileReset").on("click", function(){
 		$("#uploadFile").val("");
-		const str = `<img alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.image}" style="width: 100px; border-radius: 50%">`
+		const str = `<img alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%">`
 		$("#thumbnail").html(str);
 	})
 	

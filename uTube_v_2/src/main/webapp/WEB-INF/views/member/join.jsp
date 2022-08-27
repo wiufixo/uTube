@@ -44,7 +44,7 @@
 			<div class="input-box my-4 w-30">
 				<div class="mb-2">Profile Image</div>
 				<label for="uploadFile" id='thumbnail'>
-					<img class="mb-4" src="${pageContext.request.contextPath}/resources/images/photo.png" alt="" width="100">
+					<img id="thumbnailImg" class="mb-4" src="${pageContext.request.contextPath}/resources/images/photo.png" alt="" width="100">
 				</label> 
 				<input type="file" id="uploadFile" name="uploadFile" class="form-control" onchange="previewImage(this)"> 
 			</div>

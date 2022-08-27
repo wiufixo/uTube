@@ -38,6 +38,7 @@
 		<result column="PASSWORD" property="password"/>
 		<result column="AUTH" property="auth"/>
 		<result column="IMAGE" property="image"/>
+		<result column="SAVE_IMAGE" property="saveImage"/>
 		<result column="CHANNEL_NAME" property="channelName"/>
 		<result column="REF_MEM_NAME" property="refMemName"/>
 	</resultMap>
@@ -144,6 +145,7 @@
 		    m.password,
 		    m.auth,
 		    m.image,
+		    m.save_image,
 		    m.channel_name,
 		    c.post_id
 		FROM
@@ -172,6 +174,7 @@
 		    password,
 		    auth,
 		    image,
+		    save_image,
 		    channel_name,
 		    post_id
 		FROM
@@ -198,6 +201,7 @@
 					    m.password,
 					    m.auth,
 					    m.image,
+					    m.save_image,
 					    m.channel_name,
 					    c.post_id
 					FROM
@@ -233,6 +237,7 @@
 		    m.password,
 		    m.auth,
 		    m.image,
+		    m.save_image,
 		    m.channel_name,
 		    c.post_id
 		FROM

@@ -21,6 +21,7 @@ public class CmtList {
 	private String password;
 	private String auth;
 	private String image;
+	private String saveImage;
 	private String channelName;
 	@Override
 	public String toString() {
@@ -28,7 +29,8 @@ public class CmtList {
 				+ ", memId=" + memId + ", registDate=" + registDate + ", updateDate=" + updateDate + ", registIp="
 				+ registIp + ", updateIp=" + updateIp + ", cmtRef=" + cmtRef + ", cmtStep=" + cmtStep + ", cmtLevel="
 				+ cmtLevel + ", refMemName=" + refMemName + ", memName=" + memName + ", password=" + password
-				+ ", auth=" + auth + ", image=" + image + ", channelName=" + channelName + "]";
+				+ ", auth=" + auth + ", image=" + image + ", saveImage=" + saveImage + ", channelName=" + channelName
+				+ "]";
 	}
 	public int getReplies() {
 		return replies;
@@ -132,6 +134,12 @@ public class CmtList {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	public String getSaveImage() {
+		return saveImage;
+	}
+	public void setSaveImage(String saveImage) {
+		this.saveImage = saveImage;
+	}
 	public String getChannelName() {
 		return channelName;
 	}
@@ -140,7 +148,7 @@ public class CmtList {
 	}
 	public CmtList(int replies, int cmtId, String cmtContent, int postId, int memId, Date registDate, Date updateDate,
 			String registIp, String updateIp, int cmtRef, int cmtStep, int cmtLevel, String refMemName, String memName,
-			String password, String auth, String image, String channelName) {
+			String password, String auth, String image, String saveImage, String channelName) {
 		super();
 		this.replies = replies;
 		this.cmtId = cmtId;
@@ -159,6 +167,7 @@ public class CmtList {
 		this.password = password;
 		this.auth = auth;
 		this.image = image;
+		this.saveImage = saveImage;
 		this.channelName = channelName;
 	}
 	public CmtList() {

@@ -12,6 +12,7 @@ public class FollowList {
 	private String password;
 	private String auth;
 	private String image;
+	private String saveImage;
 	private String channelName;
 	private int followers;
 	
@@ -19,7 +20,8 @@ public class FollowList {
 	public String toString() {
 		return "FollowList [followId=" + followId + ", follower=" + follower + ", followed=" + followed
 				+ ", followDate=" + followDate + ", memName=" + memName + ", password=" + password + ", auth=" + auth
-				+ ", image=" + image + ", channelName=" + channelName + ", followers=" + followers + "]";
+				+ ", image=" + image + ", saveImage=" + saveImage + ", channelName=" + channelName + ", followers="
+				+ followers + "]";
 	}
 	public int getFollowId() {
 		return followId;
@@ -69,6 +71,12 @@ public class FollowList {
 	public void setImage(String image) {
 		this.image = image;
 	}
+	public String getSaveImage() {
+		return saveImage;
+	}
+	public void setSaveImage(String saveImage) {
+		this.saveImage = saveImage;
+	}
 	public String getChannelName() {
 		return channelName;
 	}
@@ -82,7 +90,7 @@ public class FollowList {
 		this.followers = followers;
 	}
 	public FollowList(int followId, int follower, int followed, Date followDate, String memName, String password,
-			String auth, String image, String channelName, int followers) {
+			String auth, String image, String saveImage, String channelName, int followers) {
 		super();
 		this.followId = followId;
 		this.follower = follower;
@@ -92,6 +100,7 @@ public class FollowList {
 		this.password = password;
 		this.auth = auth;
 		this.image = image;
+		this.saveImage = saveImage;
 		this.channelName = channelName;
 		this.followers = followers;
 	}

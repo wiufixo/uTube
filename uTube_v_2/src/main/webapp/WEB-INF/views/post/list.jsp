@@ -157,18 +157,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/function.js"></script>
 <script type="text/javascript">
-// Add slideDown animation to Bootstrap dropdown when expanding.
-$('.dropdown').on('show.bs.dropdown', function() {
-  $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-});
-
-// Add slideUp animation to Bootstrap dropdown when collapsing.
-$('.dropdown').on('hide.bs.dropdown', function() {
-  $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-});
-	
-	
-	const login = '${login}';
+	const login = "${login}";
 	
 	const currentPage = "${re.pagination.page }";
 	const pageLink = $(".page[page='"+currentPage+"']");

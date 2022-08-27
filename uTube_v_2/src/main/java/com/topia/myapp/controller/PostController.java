@@ -148,7 +148,6 @@ public class PostController {
 		logger.info(post.toString());
 		
 		int re = postService.updatePost(post);
-		
 		if(re==1) {
 			logger.info("================게시물 수정 성공================");
 			mav.addObject("post", postService.getPost(post.getPostId()));

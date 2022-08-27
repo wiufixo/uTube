@@ -4,24 +4,24 @@
 <div class="nav-bg d-flex align-items-center">
 	<div class="nav row">
 		<div class="col-md-3 y-center">
-			<a class="big-link" href="http://125.7.234.18:8000/topiadev/">🌈TOPIA</a>
+			<a class="big-link" href="http://125.7.234.18:8000/topiadev/">🌈UTube</a>
 			<c:if test="${login != null and (login.auth == 'MANAGER' or login.auth == 'MASTER') }">
 				&nbsp;
 				<div class="dropdown">
 					<a class="btn mybtn1 dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"> 관리 </a>
 					<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 						<li>
-							<a class="dropdown-item" href="/member/list">유저목록</a>
+							<a class="dropdown-item" href="${pageContext.request.contextPath}/member/list">유저목록</a>
 						</li>
 						<li>
-							<a class="dropdown-item" href="/post/list">동영상목록</a>
+							<a class="dropdown-item" href="${pageContext.request.contextPath}/post/list">동영상목록</a>
 						</li>
 					</ul>
 				</div>
 			</c:if>
 		</div>
 		<div class="col-md-6 x-center y-center">
-			<a href="/">
+			<a href="${pageContext.request.contextPath}/">
 				<img class="logo" src="${pageContext.request.contextPath}/resources/images/logo.png" />
 			</a>
 			<select id="mainSearchType" class="form-select" style="width: 25%; height: 35px;">
@@ -42,23 +42,23 @@
 						<a class="btn mybtn1 dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"> menu </a>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 							<li>
-								<a class="dropdown-item" href="/">홈</a>
+								<a class="dropdown-item" href="${pageContext.request.contextPath}/">홈</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="/post/insert">동영상등록</a>
+								<a class="dropdown-item" href="${pageContext.request.contextPath}/post/insert">동영상등록</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="/member/detail?memId=${login.memId }">마이페이지</a>
+								<a class="dropdown-item" href="${pageContext.request.contextPath}/member/detail?memId=${login.memId }">마이페이지</a>
 							</li>
 							<li>
-								<a class="dropdown-item" href="/member/logout">로그아웃</a>
+								<a class="dropdown-item" href="${pageContext.request.contextPath}/member/logout">로그아웃</a>
 							</li>
 						</ul>
 					</div>
 				</c:when>
 				<c:otherwise>
-					<a class="btn mybtn1" href="/member/login">로그인</a>
-					<a class="btn mybtn1" href="/member/join">회원가입</a>
+					<a class="btn mybtn1" href="${pageContext.request.contextPath}/member/login">로그인</a>
+					<a class="btn mybtn1" href="${pageContext.request.contextPath}/member/join">회원가입</a>
 				</c:otherwise>
 			</c:choose>
 		</div>

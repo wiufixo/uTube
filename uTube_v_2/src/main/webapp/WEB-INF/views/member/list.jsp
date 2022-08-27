@@ -49,12 +49,24 @@
 							<option value="uploads" <c:if test="${re.pagination.criteria == 'uploads'}">selected</c:if>>영상수순</option>
 						</select>
 					</div>
-					<div style="padding-right: 0" class="col-md-2 d-flex justify-content-end">
+					<div style="padding-right: 0" class="col-md-4 d-flex justify-content-end">
+						<button type="button" id="excelBtn" class="btn mybtn2">엑셀다운</button>
+						<button type="button" id="excelAllBtn" class="btn mybtn2">엑셀다운(전체)</button>
 						<a href="./join" class="btn mybtn2">등록</a>
 						<button type="button" id="listDeleteBtn" class="btn mybtn2">삭제</button>
 					</div>
 				</div>
 		</form>
+
+		<form id="excelFrm" method="post" action="${pageContext.request.contextPath}/excel/download">
+			<input type="hidden" name="page" value="${re.pagination.page }">
+			<input type="hidden" name="criteria" value="${re.pagination.criteria }">
+			<input type="hidden" name="searchType" value="${re.pagination.searchType }">
+			<input type="hidden" name="keyword" value="${re.pagination.keyword }">
+			<input type="hidden" name="perPage" value="${re.pagination.perPage }">
+			<input type="hidden" name="pageSize" value="${re.pagination.pageSize }">
+		</form>
+
 		<div class="my-2">${re.pagination.totalCnt}건</div>
 
 		<div class="text-center my-3">
@@ -101,7 +113,11 @@
 									<td>${mem.uploads}</td>
 									<td>${mem.registDateStr}</td>
 									<td>${mem.auth}</td>
-									<td><a href="./update?memId=${mem.memId }" class="btn mybtn2">수정</a></td>
+									<td>
+									<c:if test="${mem.auth != 'MASTER' }">
+									<a href="./update?memId=${mem.memId }" class="btn mybtn2">수정</a>
+									</c:if>
+									</td>
 								</tr>
 							</c:forEach>
 						</c:when>
@@ -142,14 +158,65 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/function.js"></script>
 	<script type="text/javascript">
-	const login = '${login}';
+	const login = "${login}";
 	
 	const currentPage = "${re.pagination.page }";
+	const searchCnt = ${re.pagination.totalCnt};
+	
 	const pageLink = $(".page[page='"+currentPage+"']");
 	$(pageLink).addClass("active")
 	
 	checkAllToggle();
 	
+	$("#excelBtn").on("click", function(){
+		if(searchCnt==0){
+			alert("검색 결과가 0입니다.");
+			return false;
+		}
+		const formObj = $("#excelFrm");
+		formObj.submit();
+	})
+	
+	$("#excelAllBtn").on("click", function(){
+		const formObj = $("#excelFrm");
+		const page = $(formObj).find("input[name='page']");
+		$(page).val(0);
+		formObj.submit();
+	})
+	
+	/* 
+	$("#excelBtnx").on("click", function(){
+		$.ajax({
+			url:`${pageContext.request.contextPath}/excel/download`,
+			type:"post",
+			success:function(){
+				alert("다운로드가 완료되었습니다");
+			},
+			error : function(request,status,error) {
+	            alert("다운로드에 실패하였습니다.\ncode:"+request.status+"\n"+"error:"+error);
+	        }
+		})
+	 }) */
+	/* 	
+		$.ajax({
+			url:"./userList",
+			type:"get",
+			success:function(re){
+				$.ajax({
+					url:`${pageContext.request.contextPath}/excel/download`,
+					type:"post",
+					data : JSON.stringify(re),
+			        contentType : "application/json; charset=UTF-8",
+					success:function(){
+						alert("다운로드가 완료되었습니다");
+					},
+					error : function(request,status,error) {
+			            alert("다운로드에 실패하였습니다.\ncode:"+request.status+"\n"+"error:"+error);
+			        },
+				})
+			}
+		})
+	 */	
 	</script>
 </body>
 </html>

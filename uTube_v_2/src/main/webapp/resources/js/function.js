@@ -1,3 +1,6 @@
+
+
+
 function getContextPath() {
   return sessionStorage.getItem("contextpath");
 }
@@ -7,6 +10,16 @@ console.log("ctx", ctx);
 if ($("body").height() < $(window).height()) {
   console.log("스크롤 없는 상태");
 }
+
+// Add slideDown animation to Bootstrap dropdown when expanding.
+$('.dropdown').on('show.bs.dropdown', function() {
+  $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+});
+
+// Add slideUp animation to Bootstrap dropdown when collapsing.
+$('.dropdown').on('hide.bs.dropdown', function() {
+  $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+});
 
 //버튼 관련 이벤트
 function btnEvent() {
@@ -36,7 +49,7 @@ function btnEvent() {
     const keyword = $("#mainKeyword").val();
     const searchType = $("#mainSearchType").val();
 
-    location.href = `/?keyword=${keyword}&searchType=${searchType}`;
+    location.href = `${ctx}/?keyword=${keyword}&searchType=${searchType}`;
   }
 
   $("#mainSearchBtn").on("click", function () {
@@ -280,19 +293,21 @@ function btnEvent() {
 					          const cmtLevel = cmt.cmtLevel;
 					          
 					          list += `<li class="cmtItem ${cmt.cmtRef}">
+					          		<div style="padding:0px 10px;"> ↳ </div>
 				                    <div class="cmt-img">
-				                    <a href="${ctx}/member/detail?memId=${cmt.memId}">
-				                    <img src="${ctx}/resources/upload/member/${cmt.image}" alt="프로필사진">
-				                    </a>
+					                    <a href="${ctx}/member/detail?memId=${cmt.memId}">
+					                    <img src="${ctx}/resources/upload/member/${cmt.saveImage}" alt="프로필사진">
+					                    </a>
 				                    </div>
 				                    <div class="cmt-info">
 				                    <div class="info-top">
 				                        <span>`;
-
+							  /*
 					          if (cmtLevel != 0) {
 					            list += "&nbsp;&nbsp;";
 					            list += " ↳ ";
 					          }
+					          */
 					          
 					          const time = timeBefore(cmt.registDate);
 
@@ -302,9 +317,11 @@ function btnEvent() {
 					                    </div>
 					                    <div class="info-top">
 					                        <span>`;
+					          /*
 					          if (cmtLevel != 0) {
 					            list += "&nbsp;&nbsp;&nbsp;";
 					          }
+					          */
 
 					          if (cmt.refMemName) {
 					            if (cmt.cmtLevel > 1) {
@@ -327,9 +344,11 @@ function btnEvent() {
 					          if (loginMemId != 0) {
 					            list += `<div class="info-button-box">`;
 
+					            /*
 					            if (cmtLevel != 0) {
 					              list += "&nbsp;&nbsp;&nbsp;";
 					            }
+					            */
 
 					            list += `<input type="hidden" class="cmtLevel" value="${cmt.cmtLevel}">
 					                            <span id="cmtLikeBtn" class="mb-1" style="font-size: 0.9em; color: blue">좋아요</span>
@@ -412,7 +431,7 @@ function btnEvent() {
           $("#loginId").val("");
           $("#loginPwd").val("");
         } else if (re == 1) {
-          location.href = "/";
+          location.href = `${ctx}/`;
         }
       },
     });
@@ -680,10 +699,7 @@ function followCancel(follower, followed) {
         } 
       */
       printFollowBtn(follower, followed);
-
-      if ($(".channel").length == 0) {
-        followCntUpdate();
-      }
+      followCntUpdate();
     },
   });
 }
@@ -702,10 +718,8 @@ function follow(follower, followed) {
       }
       */
       printFollowBtn(follower, followed);
-
-      if ($(".channel").length == 0) {
-        followCntUpdate();
-      }
+	  
+      followCntUpdate();
     },
   });
 }
@@ -876,11 +890,20 @@ function deleteClassShow() {
 }
 
 //회원가입 프로필 썸네일 보여주는 함수
-function previewImage(target) {
+function previewImage(input) {
+	if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+        $('#thumbnailImg').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+  /*
   console.log(target.files[0]);
   const fileName = target.files[0].name;
   str = `<img class="mb-4" src="${ctx}/file/display?fileName=${fileName}" width="100">`;
   $("#thumbnail").html(str);
+  */
 }
 
 //이메일 형식 체크
@@ -925,7 +948,7 @@ function printCmtList(num) {
           list += `<li class="cmtItem parentItem">
                     <div class="cmt-img">
                     <a href="${ctx}/member/detail?memId=${cmt.memId}">
-                    <img src="${ctx}/resources/upload/member/${cmt.image}" alt="프로필사진">
+                    <img src="${ctx}/resources/upload/member/${cmt.saveImage}" alt="프로필사진">
                     </a>
                     </div>
                     <div class="cmt-info">
@@ -1014,7 +1037,7 @@ function printCmtList(num) {
           
           if(cmt.replies){
 	          list += `<div>
-	          			<div id="replyMore" class="pt-3" style="font-size: 0.9em; color: grey">답글보기</div>
+	          			<div id="replyMore" class="pt-1" style="font-size: 0.9em; color: grey">답글보기</div>
 	          			<input type="hidden" class="cmtRef" value="${cmt.cmtRef}">
 	          			</div>`
           }
@@ -1165,7 +1188,7 @@ function printPosts(num) {
         //console.log(item)
         list += `<div class="col-lg-3 p-3">
                     <div class="mycard">
-                        <a href="post/detail?postId=${item.postId}"><img class="top" src="https://img.youtube.com/vi/${item.urlId}/sddefault.jpg" alt="thumsnail"></a>
+                        <a href="${ctx}/post/detail?postId=${item.postId}"><img class="top" src="https://img.youtube.com/vi/${item.urlId}/sddefault.jpg" alt="thumsnail"></a>
                         <div>
                         <div class="title">`;
         if (item.postTitle.length > 50) {
@@ -1191,7 +1214,7 @@ function printPosts(num) {
   });
 }
 
-//회원페이지 무한스크롤 영상 불러오기 함수
+//회원상세페이지 무한스크롤 영상 불러오기 함수
 function printmemberPosts(num) {
   if ($(".mycard").length >= uploadCnt) {
     console.log("영상 불러오기 끝");

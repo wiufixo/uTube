@@ -23,6 +23,10 @@ public class MemberDAO {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
+	public List<Member> userList() {
+		return sqlSessionTemplate.selectList("member.userList");
+	}
+	
 	public List<Member> membersList(HashMap<String, Object> pageParams) {
 		logger.info("================회원 리스트 DAO================");
 		return sqlSessionTemplate.selectList("member.membersList", pageParams);
@@ -68,5 +72,6 @@ public class MemberDAO {
 	public String findPassword(HashMap<String, Object> param) {
 		return sqlSessionTemplate.selectOne("member.findPassword", param);
 	}
+
 
 }

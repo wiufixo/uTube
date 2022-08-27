@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,6 +87,14 @@ public class MemberController {
 		}
 
 		return mav;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "userList", method = RequestMethod.GET)
+	public ArrayList<Member> userList() {
+		logger.info("**********유저 목록 Controller**********");
+		
+		return memberService.userList();
 	}
 
 	@RequestMapping(value = "find", method = RequestMethod.GET)

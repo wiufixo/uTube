@@ -83,7 +83,7 @@
 						<button id="resignBtn" class="btn mybtn3" type="button">탈퇴</button>
 					</div>
 				</c:if>
-				<c:if test="${login.memId!=member.memId and (login.auth=='MANAGER' or login.auth=='MASTER')}">
+				<c:if test="${login.memId!=member.memId and ((login.auth=='MANAGER'and member.auth!='MASTER') or login.auth=='MASTER')}">
 					<div class="btnBox my-4">
 						<a href="./update?memId=${member.memId }" class="btn mybtn3">회원수정</a>
 						<button id="deleteBtn" class="btn mybtn3" type="button">회원삭제</button>

@@ -94,13 +94,13 @@
 					<div class="channel my-3 py-2 align-items-center">
 						<div class="uploader">
 							<a href="${pageContext.request.contextPath}/member/detail?memId=${post.memId }">
-								<img src="${pageContext.request.contextPath}/resources/upload/member/${post.image}" alt="" style="width: 65px;">
+								<img src="${pageContext.request.contextPath}/resources/upload/member/${post.saveImage}" alt="" style="width: 65px;">
 							</a>
 							<div class="info fs-6">
 								<a href="${pageContext.request.contextPath}/member/detail?memId=${post.memId }">
 									<span class="name">${post.memName }</span>
 								</a>
-								<span class="subscribers">구독자 ${post.followers }명</span>
+								<span class="subscribers">구독자 <span id="followerCnt">${post.followers }</span>명</span>
 							</div>
 						</div>
 						<div id="followBtnBox"></div>

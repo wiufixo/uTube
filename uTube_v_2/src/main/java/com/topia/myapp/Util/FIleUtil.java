@@ -12,8 +12,14 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class FIleUtil {
 
-	private final String uploadPath = Paths.get("C:", "upload", "member").toString();
-
+	private final String uploadPath = "C:/git_0825/uTube/uTube_v_2/src/main/webapp/resources/upload/member";
+	//private final String uploadPath = Paths.get("C:", "upload", "member").toString();
+	//개발이클립스용
+	//private final String uploadPath = "C:/Users/topiait/Desktop/토피아 개발서버 작업용-20220118/uTube_v_2/src/main/webapp/resources/upload/member";
+	//실개발섭 반영용
+	//private final String uploadPath = "C:/Program Files/Apache Software Foundation/Tomcat 9.0/webapps/uTube_minji/resources/upload/member";
+	
+	
 	private final String getRandomString() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}

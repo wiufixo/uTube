@@ -1054,3 +1054,25 @@ Insert into FOLLOW (FOLLOW_ID,FOLLOWER,FOLLOWED,FOLLOW_DATE) values (93,23,34,to
   ALTER TABLE "FOLLOW" MODIFY ("FOLLOW_DATE" NOT NULL ENABLE);
   ALTER TABLE "FOLLOW" MODIFY ("FOLLOWED" NOT NULL ENABLE);
   ALTER TABLE "FOLLOW" MODIFY ("FOLLOWER" NOT NULL ENABLE);
+  
+  
+drop sequence cmt_seq;
+drop sequence follow_seq;
+drop sequence like_down_seq;
+drop sequence like_up_seq;
+drop sequence member_seq;
+drop sequence post_seq;
+
+create sequence cmt_seq
+start with 250;
+create sequence follow_seq
+start with 250;
+create sequence like_down_seq
+start with 250;
+create sequence like_up_seq
+start with 250;
+create sequence member_seq
+start with 250;
+create sequence post_seq
+start with 250;
+  
