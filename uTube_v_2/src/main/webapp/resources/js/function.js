@@ -880,8 +880,8 @@ function hate(target) {
 }
 
 //마이페이지 드롭다운 범위밖 커서 눌렀을때 숨김처리
-function deleteClassShow() {
-  const dropdowns = $(".dropdown-content");
+function deleteClassShow(ex) {
+  const dropdowns = $(".dropdown-content").not(ex);
   for (dropdown of dropdowns) {
     if ($(dropdown).hasClass("show")) {
       $(dropdown).removeClass("show");

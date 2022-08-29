@@ -54,7 +54,7 @@
 			<div class="input-box my-4 w-50">
 				<div class="mb-2">Profile Image</div>
 						<label for="uploadFile" id='thumbnail'>
-							<img class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%">
+							<img id="thumbnailImg" class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%">
 						</label> 
 				<div class="d-flex justify-content-between align-items-center row">
 					<div class="my-4 col-md-10">
@@ -78,16 +78,10 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/function.js"></script>
 	<script type="text/javascript">
-	function previewImage(target) {
-		//console.log(target.files[0])
-		const fileName = target.files[0].name;
-		const str = `<img src="${pageContext.request.contextPath}/file/display?fileName=\${fileName}" style="width: 100px; border-radius: 50%">`
-		$("#thumbnail").html(str);
-	}
 	
 	$("#fileReset").on("click", function(){
 		$("#uploadFile").val("");
-		const str = `<img alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%">`
+		const str = `<img id="thumbnailImg" class="profile-img" alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%">`
 		$("#thumbnail").html(str);
 	})
 	

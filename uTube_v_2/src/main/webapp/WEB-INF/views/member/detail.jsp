@@ -20,11 +20,11 @@
 			</div>
 			<div class="input-box my-4 py-2 d-flex align-items-center row">
 				<div class="col-md-3">
-					<img alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.image}" style="width: 100px; border-radius: 50%; padding: 5px; border: 6px solid orange;">
+					<img alt="프로필이미지" src="${pageContext.request.contextPath}/resources/upload/member/${member.saveImage}" style="width: 100px; border-radius: 50%; padding: 5px; border: 6px solid orange;">
 				</div>
 				<div class="col-md-3">
 					<div class="my-2">구독자수</div>
-					<div id="followerCnt" class="dropdownBtn my-2 fw-bold" onclick="printFollowersList()">${followerList.cnt }</div>
+					<div id="followerCnt" class="dropdownBtn my-2 fw-bold" onclick="printFollowersList(this)">${followerList.cnt }</div>
 					<div id="followerList" class="dropdown-content">
 						<c:forEach items="${followerList.list }" var="follower">
 							<a href="./detail?memId=${follower.follower}">${follower.memName }</a>
@@ -33,7 +33,7 @@
 				</div>
 				<div class="col-md-3">
 					<div class="my-2">구독채널수</div>
-					<div class="dropdownBtn my-2 fw-bold" onclick="printFollowingsList()">${followingList.cnt }</div>
+					<div class="dropdownBtn my-2 fw-bold" onclick="printFollowingsList(this)">${followingList.cnt }</div>
 					<div id="followingList" class="dropdown-content">
 						<c:forEach items="${followingList.list }" var="following">
 							<a href="./detail?memId=${following.followed}">${following.memName }</a>
@@ -158,12 +158,14 @@
 		
 		
 		
-		function printFollowingsList(){
-			deleteClassShow();
+		function printFollowingsList(target){
+			const content = $(target).next();
+			deleteClassShow(content);
 			$("#followingList").toggleClass("show");
 		}
-		function printFollowersList() {
-			deleteClassShow();
+		function printFollowersList(target) {
+			const content = $(target).next();
+			deleteClassShow(content);
 			$("#followerList").toggleClass("show");
 		}
 		/* function printUploadList() {
@@ -173,12 +175,7 @@
 		
 		$(window).on("click", function(e){
 			if(!$(e.target).is($(".dropdownBtn"))){
-				const dropdowns = $(".dropdown-content");
-				for(dropdown of dropdowns){
-					if($(dropdown).hasClass("show")){
-						$(dropdown).removeClass("show");
-					}
-				}
+				deleteClassShow();
 			}
 		})
 	</script>
