@@ -1,98 +1,168 @@
 --------------------------------------------------------
+-- 테이블, 시퀀스 생성부만 상단으로 모음
+-- ALTER문+제약조건은 데이터 등록후 수행되도록 하단에 위치
+--------------------------------------------------------
+--DROP시는 POST, MEMBER를 후반부에 수행할것
+--DROP TABLE CMT;
+--DROP TABLE LIKE_UP;
+--DROP TABLE LIKE_DOWN;
+--DROP TABLE FOLLOW;
+--DROP TABLE POST;
+--DROP TABLE MEMBER;
+--DROP sequence CMT_SEQ;
+--DROP sequence FOLLOW_SEQ;
+--DROP sequence LIKE_DOWN_SEQ;
+--DROP sequence LIKE_UP_SEQ;
+--DROP sequence member_SEQ;
+--DROP sequence POST_SEQ;
+
+  CREATE TABLE MEMBER
+   (	MEM_ID NUMBER(11,0),
+	MEM_NAME VARCHAR2(20 BYTE),
+	PASSWORD VARCHAR2(100 BYTE),
+	AUTH VARCHAR2(15 BYTE),
+	REGIST_DATE DATE,
+	UPDATE_DATE DATE DEFAULT NULL,
+	REGIST_ID NUMBER(11,0),
+	UPDATE_ID NUMBER(11,0) DEFAULT NULL,
+	REGIST_IP VARCHAR2(50 BYTE),
+	UPDATE_IP VARCHAR2(50 BYTE) DEFAULT NULL,
+	EMAIL VARCHAR2(50 BYTE),
+	IMAGE VARCHAR2(50 BYTE),
+	SAVE_IMAGE VARCHAR2(50 BYTE),
+	CHANNEL_NAME VARCHAR2(50 BYTE)
+   );
+
+  CREATE TABLE POST
+   (	POST_ID NUMBER(11,0),
+	POST_TITLE VARCHAR2(300 BYTE),
+	POST_URL VARCHAR2(300 BYTE),
+	POST_CONTENT VARCHAR2(2000 BYTE),
+	REGIST_DATE DATE,
+	UPDATE_DATE DATE DEFAULT NULL,
+	REGIST_IP VARCHAR2(50 BYTE),
+	UPDATE_IP VARCHAR2(50 BYTE) DEFAULT NULL,
+	MEM_ID NUMBER(11,0),
+	HIT NUMBER(11,0),
+	URL_ID VARCHAR2(100 BYTE)
+   );
+
+  CREATE TABLE CMT
+   (	CMT_ID NUMBER(11,0),
+	CMT_CONTENT VARCHAR2(300 BYTE),
+	POST_ID NUMBER(11,0),
+	MEM_ID NUMBER(11,0),
+	REGIST_DATE DATE,
+	UPDATE_DATE DATE,
+	REGIST_IP VARCHAR2(50 BYTE),
+	UPDATE_IP VARCHAR2(50 BYTE),
+	CMT_REF NUMBER(11,0),
+	CMT_STEP NUMBER(11,0),
+	CMT_LEVEL NUMBER(11,0),
+	REF_MEM_NAME VARCHAR2(50 BYTE)
+   );
+
+  CREATE TABLE LIKE_UP
+   (	LIKE_ID NUMBER(11,0),
+	POST_ID NUMBER(11,0),
+	MEM_ID NUMBER(11,0)
+   );
+
+  CREATE TABLE LIKE_DOWN
+   (	LIKE_ID NUMBER(11,0),
+	POST_ID NUMBER(11,0),
+	MEM_ID NUMBER(11,0)
+   );
+
+  CREATE TABLE FOLLOW
+   (	FOLLOW_ID NUMBER(11,0),
+	FOLLOWER NUMBER(11,0),
+	FOLLOWED NUMBER(11,0),
+	FOLLOW_DATE DATE
+   );
+
+create sequence CMT_SEQ start with 300;
+create sequence FOLLOW_SEQ start with 300;
+create sequence LIKE_DOWN_SEQ start with 300;
+create sequence LIKE_UP_SEQ start with 300;
+create sequence member_SEQ start with 300;
+create sequence POST_SEQ start with 300;
+
+--------------------------------------------------------
 --  DDL for Table MEMBER
 --------------------------------------------------------
 
-  CREATE TABLE "MEMBER" 
-   (	"MEM_ID" NUMBER(11,0), 
-	"MEM_NAME" VARCHAR2(20 BYTE), 
-	"PASSWORD" VARCHAR2(100 BYTE), 
-	"AUTH" VARCHAR2(15 BYTE), 
-	"REGIST_DATE" DATE, 
-	"UPDATE_DATE" DATE DEFAULT NULL, 
-	"REGIST_ID" NUMBER(11,0), 
-	"UPDATE_ID" NUMBER(11,0) DEFAULT NULL, 
-	"REGIST_IP" VARCHAR2(50 BYTE), 
-	"UPDATE_IP" VARCHAR2(50 BYTE) DEFAULT NULL, 
-	"EMAIL" VARCHAR2(50 BYTE), 
-	"IMAGE" VARCHAR2(50 BYTE), 
-	"SAVE_IMAGE" VARCHAR2(50 BYTE), 
-	"CHANNEL_NAME" VARCHAR2(50 BYTE)
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+--  CREATE TABLE MEMBER
+--   (	MEM_ID NUMBER(11,0),
+--	MEM_NAME VARCHAR2(20 BYTE),
+--	PASSWORD VARCHAR2(100 BYTE),
+--	AUTH VARCHAR2(15 BYTE),
+--	REGIST_DATE DATE,
+--	UPDATE_DATE DATE DEFAULT NULL,
+--	REGIST_ID NUMBER(11,0),
+--	UPDATE_ID NUMBER(11,0) DEFAULT NULL,
+--	REGIST_IP VARCHAR2(50 BYTE),
+--	UPDATE_IP VARCHAR2(50 BYTE) DEFAULT NULL,
+--	EMAIL VARCHAR2(50 BYTE),
+--	IMAGE VARCHAR2(50 BYTE),
+--	SAVE_IMAGE VARCHAR2(50 BYTE),
+--	CHANNEL_NAME VARCHAR2(50 BYTE)
+--   );
+
+
 REM INSERTING into MEMBER
 SET DEFINE OFF;
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (3,'고민지','1234','USER',to_date('22/08/12','RR/MM/DD'),to_date('22/08/19','RR/MM/DD'),3,23,'1234','127.0.0.1','abcd@naver.com','premium-icon-academic-4532513.png','8685d8bd6fdf43d6a23c1edda3387a78.png','23번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (4,'고민지','1234','MASTER',to_date('22/08/12','RR/MM/DD'),null,4,null,'1234',null,'naver.com','no_image.png',null,'24번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (23,'flower','1234','MASTER',to_date('22/08/15','RR/MM/DD'),to_date('22/08/18','RR/MM/DD'),23,23,'127.0.0.1','127.0.0.1','naver.com','premium-icon-academic-4532513.png','714d49244b244337ad417ed2d3c403b1.png','23번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (34,'topia','1234','MANAGER',to_date('22/08/18','RR/MM/DD'),null,34,null,'127.0.0.1',null,'topia@naver.com','free-icon-singer-2317996.png','eca23a85992440f1925cd4c6db4aa410.png','34번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (46,'flower123','1234','USER',to_date('22/08/23','RR/MM/DD'),null,23,null,'127.0.0.1',null,'flowlo@nate.com','no_image.png','no_image.png','New Channel~!!!!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (26,'orange','1234','USER',to_date('22/08/16','RR/MM/DD'),null,26,null,'0:0:0:0:0:0:0:1',null,'sdfssdf@gmail.co','no_image.png',null,'26번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (47,'flower12','1234','USER',to_date('22/08/23','RR/MM/DD'),null,23,null,'127.0.0.1',null,'sdwer@naver.com','no_image.png','no_image.png','New Channel~!!!!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (48,'flower123456','1234','USER',to_date('22/08/23','RR/MM/DD'),null,48,null,'127.0.0.1',null,'flower123@nate.com','no_image.png','no_image.png','flower123456님의 채널입니다.');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (42,'member2','1234','USER',to_date('22/08/21','RR/MM/DD'),null,23,null,'127.0.0.1',null,'member2@nate.com','no_image.png','no_image.png','42번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (43,'member3','1234','USER',to_date('22/08/21','RR/MM/DD'),null,43,null,'127.0.0.1',null,'member3@naver.com','no_image.png','no_image.png','43번의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (44,'user1','1234','USER',to_date('22/08/21','RR/MM/DD'),to_date('22/08/21','RR/MM/DD'),44,44,'127.0.0.1','127.0.0.1','user1@nate.com','no_image.png','no_image.png','New Channel~!!!!ㅎㅎ');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (53,'winner','1234','MANAGER',to_date('22/08/24','RR/MM/DD'),to_date('22/08/25','RR/MM/DD'),53,53,'127.0.0.1','127.0.0.1','winner@naver.com','avatar.png','2fa3b6569f93403e94d9d8e463a7ea7f.png','WINNER CHANNEL??');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (49,'flower1111','1234','USER',to_date('22/08/23','RR/MM/DD'),null,23,null,'127.0.0.1',null,'sdkewhr@naver.com','no_image.png','no_image.png','flower1111님의 채널입니다.');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (50,'snowman','1234','USER',to_date('22/08/23','RR/MM/DD'),null,23,null,'127.0.0.1',null,'snowman@nate.com','free-icon-career-2597069.png','615af6db0500481ebb9177e60318774a.png','snowman님의 채널입니다!');
-Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (54,'winnersub','1234','USER',to_date('22/08/25','RR/MM/DD'),null,53,null,'127.0.0.1',null,'winnerw@nate.com','no_image.png','no_image.png','WINNER SUB CHANNEL');
---------------------------------------------------------
---  DDL for Index SYS_C007115
---------------------------------------------------------
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (56,'minji','1234','MASTER',to_date('22/08/26','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),56,23,'0:0:0:0:0:0:0:1','0:0:0:0:0:0:0:1','minji@nate.com','girl.png','bf226828ff974e5cac3c47a428e59f1b.png','Minji의 Channel');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (57,'camera','1234','USER',to_date('22/08/27','RR/MM/DD'),null,23,null,'0:0:0:0:0:0:0:1',null,'flow@nate.com','no_image.png','no_image.png','Camera의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (23,'hello','1234','MASTER',to_date('22/08/15','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),23,23,'127.0.0.1','0:0:0:0:0:0:0:1','naver.com','character.png','b341ee2f337f42afb3b647297322c302.png','Hello의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (34,'youngman','1234','MANAGER',to_date('22/08/18','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),34,23,'127.0.0.1','0:0:0:0:0:0:0:1','topia@naver.com','free-icon-soldier-6142078.png','bc6a56fe00a24c50bbbae4e5482bb5b9.png','Youngman의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (58,'hello12','1234','USER',to_date('22/08/27','RR/MM/DD'),null,58,null,'0:0:0:0:0:0:0:1',null,'user@nate.com','character.png','ebd7c81fa7c64ff4a48e9e0c1b5c8614.png','user의 채널입니다!');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (26,'doctor','1234','USER',to_date('22/08/16','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),26,23,'0:0:0:0:0:0:0:1','0:0:0:0:0:0:0:1','sdfssdf@gmail.co','premium-icon-doctor-4532452.png','98d507975df4436090a64763ecdcee77.png','Doctor의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (42,'lovely','1234','USER',to_date('22/08/21','RR/MM/DD'),null,23,null,'127.0.0.1',null,'member2@nate.com','no_image.png','no_image.png','Lovely의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (43,'coffee','1234','USER',to_date('22/08/21','RR/MM/DD'),null,43,null,'127.0.0.1',null,'member3@naver.com','no_image.png','no_image.png','Coffee의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (44,'singer','1234','USER',to_date('22/08/21','RR/MM/DD'),to_date('22/08/29','RR/MM/DD'),44,56,'127.0.0.1','0:0:0:0:0:0:0:1','user1@nate.com','free-icon-bear-8324065.png','0aa681f6785b499587499d3b54164932.png','Singer의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (53,'winter','1234','MANAGER',to_date('22/08/24','RR/MM/DD'),to_date('22/08/26','RR/MM/DD'),53,53,'127.0.0.1','0:0:0:0:0:0:0:1','winner@naver.com','character.png','b61d5ca0d6774e6a8a7e3505e95bcead.png','Winter의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (49,'summer','1234','USER',to_date('22/08/23','RR/MM/DD'),null,23,null,'127.0.0.1',null,'sdkewhr@naver.com','no_image.png','no_image.png','Summer의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (50,'snowman','1234','USER',to_date('22/08/23','RR/MM/DD'),null,23,null,'127.0.0.1',null,'snowman@nate.com','free-icon-career-2597069.png','615af6db0500481ebb9177e60318774a.png','SnowMan의 Channle');
+Insert into MEMBER (MEM_ID,MEM_NAME,PASSWORD,AUTH,REGIST_DATE,UPDATE_DATE,REGIST_ID,UPDATE_ID,REGIST_IP,UPDATE_IP,EMAIL,IMAGE,SAVE_IMAGE,CHANNEL_NAME) values (55,'spring','1234','USER',to_date('22/08/26','RR/MM/DD'),null,55,null,'0:0:0:0:0:0:0:1',null,'vorangev07@gmail.com','free-icon-soldier-6142078.png','ecab1bf718af4dc685efdd144c96d496.png','Spring의 Channel');
 
-  CREATE UNIQUE INDEX "SYS_C007115" ON "MEMBER" ("MEM_ID") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  Constraints for Table MEMBER
 --------------------------------------------------------
 
-  ALTER TABLE "MEMBER" MODIFY ("EMAIL" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" ADD PRIMARY KEY ("MEM_ID")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "MEMBER" MODIFY ("REGIST_IP" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" MODIFY ("REGIST_ID" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" MODIFY ("REGIST_DATE" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" MODIFY ("AUTH" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" MODIFY ("PASSWORD" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" MODIFY ("MEM_NAME" NOT NULL ENABLE);
-  ALTER TABLE "MEMBER" MODIFY ("MEM_ID" NOT NULL ENABLE);
-  
-  
-  
+--  ALTER TABLE MEMBER MODIFY (EMAIL NOT NULL ENABLE);
+--  ALTER TABLE MEMBER ADD PRIMARY KEY (MEM_ID);
+--  ALTER TABLE MEMBER MODIFY (REGIST_IP NOT NULL ENABLE);
+--  ALTER TABLE MEMBER MODIFY (REGIST_ID NOT NULL ENABLE);
+--  ALTER TABLE MEMBER MODIFY (REGIST_DATE NOT NULL ENABLE);
+--  ALTER TABLE MEMBER MODIFY (AUTH NOT NULL ENABLE);
+--  ALTER TABLE MEMBER MODIFY (PASSWORD NOT NULL ENABLE);
+--  ALTER TABLE MEMBER MODIFY (MEM_NAME NOT NULL ENABLE);
+--  ALTER TABLE MEMBER MODIFY (MEM_ID NOT NULL ENABLE);
+
+
+
   --------------------------------------------------------
 --  DDL for Table POST
 --------------------------------------------------------
 
-  CREATE TABLE "POST" 
-   (	"POST_ID" NUMBER(11,0), 
-	"POST_TITLE" VARCHAR2(300 BYTE), 
-	"POST_URL" VARCHAR2(300 BYTE), 
-	"POST_CONTENT" VARCHAR2(2000 BYTE), 
-	"REGIST_DATE" DATE, 
-	"UPDATE_DATE" DATE DEFAULT NULL, 
-	"REGIST_IP" VARCHAR2(50 BYTE), 
-	"UPDATE_IP" VARCHAR2(50 BYTE) DEFAULT NULL, 
-	"MEM_ID" NUMBER(11,0), 
-	"HIT" NUMBER(11,0), 
-	"URL_ID" VARCHAR2(100 BYTE)
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+--  CREATE TABLE POST
+--   (	POST_ID NUMBER(11,0),
+--	POST_TITLE VARCHAR2(300 BYTE),
+--	POST_URL VARCHAR2(300 BYTE),
+--	POST_CONTENT VARCHAR2(2000 BYTE),
+--	REGIST_DATE DATE,
+--	UPDATE_DATE DATE DEFAULT NULL,
+--	REGIST_IP VARCHAR2(50 BYTE),
+--	UPDATE_IP VARCHAR2(50 BYTE) DEFAULT NULL,
+--	MEM_ID NUMBER(11,0),
+--	HIT NUMBER(11,0),
+--	URL_ID VARCHAR2(100 BYTE)
+--   );
 REM INSERTING into POST
 SET DEFINE OFF;
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (44,'당신은 언제 어디서나 공부합니까? 밥을 먹으면서 책을 읽나요? | 3 hour lofi hiphop mix / lofi study / chill beats','https://youtu.be/oaIJNOqY1oQ','Listen to this: (?´?`?):
-Rainy Days ? Music to put you in a better mood 
+Rainy Days ? Music to put you in a better mood
 ?https://youtu.be/V2Hcp8Wmcak
 Dreamscape & Lofi Chill - Calm & Chill Lofi Music for Study , Coding , Work
 ?https://youtu.be/Db-oA_9eYeY',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,23,73,'oaIJNOqY1oQ');
@@ -149,7 +219,7 @@ contact: play.lucete@gmail.com
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (52,'[Playlist] ㄹㅇ..진짜 좋은데 어떻게 설명할 방법이 없네.. ? 차곡차곡 모아본 봄노래 ? 설레는 노래모음 광고없는 플레이리스트','https://youtu.be/nO1mbK62xrk','#플레이리스트 #노래모음 #광고없음
 
 댓글 안달면 탈모옴^_^',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,34,18,'nO1mbK62xrk');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (53,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (53,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다.
 
 #Playlist #플레이리스트 #노동요',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,23,39,'7loLjL5nOHI');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (54,'머릿속이 복잡한 여름밤, 편안하게 듣기 좋은 노래 모음 | PLAYLIST','https://youtu.be/F-o1wmQ1AKA','본 콘텐츠의 ''일부''는 워너뮤직의 지원을 받아 제작되었습니다.
@@ -178,7 +248,7 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 
 멜론에서 듣기 : http://kko.to/UZ7-jivYB
 
-노래추천 
+노래추천
 contact7969@gmail.com',to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,34,21,'7exOT6FIKkE');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (69,'???????? 이거 들으면서 여행갈래??? 신나는 감성힙합/R&B | 박재범, pH-1, 크러쉬, BIG Naughty, DPR LIVE','https://youtu.be/JP4ufXYyaFw','[Track List] ???
 
@@ -226,9 +296,9 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 ▶? 모든 음원은 직접 연주한 음원입니다.
 ▶? 저희 음악을 사용해서 영상을 업로드 하시는 분들은 출처와 링크를 남겨주세요. 감사합니다 :)
 
-   ?Business Contact 
+   ?Business Contact
     ??E-mail : Monkeysounddesign@gmail.com',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,26,1,'86gToHFkbiU');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (73,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (73,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요.
 あなたの心を?にさせてくれる "BeiGe Mellow"です。今日も幸せな一日を過ごしてください',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,34,0,'_dn5vYN2GWY');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (74,'?Coffee & Work Jazz Piano Music l 작업할 때, 일할 때 듣기 좋은 음악? lRelaxing Jazz Piano Music for Work, Focus','https://youtu.be/XqdfqtVrz14','- 저희 음악이 마음에 드신다면 구독과 좋아요 부탁드려요!
   - Please Subscribe!
@@ -253,14 +323,14 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
   - 모든 음원은 직접 연주한 음원입니다.
   - All songs are songs that I played myself.
 
-?Business Contact 
+?Business Contact
  ??E-mail : Monkeysounddesign@gmail.com',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,23,1,'XqdfqtVrz14');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (75,'| playlist | 재즈 피아노와 비트, Kiefer의 노래들','https://youtu.be/qHIcmiduyQY','도시를 감싸는 그루비한 재즈 피아노 연주곡
 
-좋아하는 음악을 함께 들어요.  
+좋아하는 음악을 함께 들어요.
 An ode to all the things we love.
 
-본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다. 
+본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다.
 Ode Studio는 플레이리스트를 통해 수익을 창출하지 않으며 모든 수익은 아티스트에게 돌아갑니다.
 
 #플레이리스트 #Kiefer #키퍼
@@ -277,7 +347,7 @@ http://www.iMBC.com/broad/tv/ent/hang...
 WAVVE
 https://www.wavve.com/player/vod?prog...',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,23,1,'8UEZoc6QCwU');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (78,'당신은 언제 어디서나 공부합니까? 밥을 먹으면서 책을 읽나요? | 3 hour lofi hiphop mix / lofi study / chill beats','https://youtu.be/oaIJNOqY1oQ','Listen to this: (?´?`?):
-Rainy Days ? Music to put you in a better mood 
+Rainy Days ? Music to put you in a better mood
 ?https://youtu.be/V2Hcp8Wmcak
 Dreamscape & Lofi Chill - Calm & Chill Lofi Music for Study , Coding , Work
 ?https://youtu.be/Db-oA_9eYeY',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,26,0,'oaIJNOqY1oQ');
@@ -334,7 +404,7 @@ contact: play.lucete@gmail.com
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (84,'[Playlist] ㄹㅇ..진짜 좋은데 어떻게 설명할 방법이 없네.. ? 차곡차곡 모아본 봄노래 ? 설레는 노래모음 광고없는 플레이리스트','https://youtu.be/nO1mbK62xrk','#플레이리스트 #노래모음 #광고없음
 
 댓글 안달면 탈모옴^_^',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,26,0,'nO1mbK62xrk');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (85,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (85,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다.
 
 #Playlist #플레이리스트 #노동요',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,34,0,'7loLjL5nOHI');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (86,'머릿속이 복잡한 여름밤, 편안하게 듣기 좋은 노래 모음 | PLAYLIST','https://youtu.be/F-o1wmQ1AKA','본 콘텐츠의 ''일부''는 워너뮤직의 지원을 받아 제작되었습니다.
@@ -363,7 +433,7 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 
 멜론에서 듣기 : http://kko.to/UZ7-jivYB
 
-노래추천 
+노래추천
 contact7969@gmail.com',to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,23,0,'7exOT6FIKkE');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (90,'???????? 이거 들으면서 여행갈래??? 신나는 감성힙합/R&B | 박재범, pH-1, 크러쉬, BIG Naughty, DPR LIVE','https://youtu.be/JP4ufXYyaFw','[Track List] ???
 
@@ -411,16 +481,16 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 ▶? 모든 음원은 직접 연주한 음원입니다.
 ▶? 저희 음악을 사용해서 영상을 업로드 하시는 분들은 출처와 링크를 남겨주세요. 감사합니다 :)
 
-   ?Business Contact 
+   ?Business Contact
     ??E-mail : Monkeysounddesign@gmail.com',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,26,0,'86gToHFkbiU');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (94,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (94,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요.
 あなたの心を?にさせてくれる "BeiGe Mellow"です。今日も幸せな一日を過ごしてください',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,34,0,'_dn5vYN2GWY');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (96,'| playlist | 재즈 피아노와 비트, Kiefer의 노래들','https://youtu.be/qHIcmiduyQY','도시를 감싸는 그루비한 재즈 피아노 연주곡
 
-좋아하는 음악을 함께 들어요.  
+좋아하는 음악을 함께 들어요.
 An ode to all the things we love.
 
-본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다. 
+본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다.
 Ode Studio는 플레이리스트를 통해 수익을 창출하지 않으며 모든 수익은 아티스트에게 돌아갑니다.
 
 #플레이리스트 #Kiefer #키퍼
@@ -437,7 +507,7 @@ http://www.iMBC.com/broad/tv/ent/hang...
 WAVVE
 https://www.wavve.com/player/vod?prog...',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,23,0,'8UEZoc6QCwU');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (99,'당신은 언제 어디서나 공부합니까? 밥을 먹으면서 책을 읽나요? | 3 hour lofi hiphop mix / lofi study / chill beats','https://youtu.be/oaIJNOqY1oQ','Listen to this: (?´?`?):
-Rainy Days ? Music to put you in a better mood 
+Rainy Days ? Music to put you in a better mood
 ?https://youtu.be/V2Hcp8Wmcak
 Dreamscape & Lofi Chill - Calm & Chill Lofi Music for Study , Coding , Work
 ?https://youtu.be/Db-oA_9eYeY',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,26,0,'oaIJNOqY1oQ');
@@ -494,7 +564,7 @@ contact: play.lucete@gmail.com
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (105,'[Playlist] ㄹㅇ..진짜 좋은데 어떻게 설명할 방법이 없네.. ? 차곡차곡 모아본 봄노래 ? 설레는 노래모음 광고없는 플레이리스트','https://youtu.be/nO1mbK62xrk','#플레이리스트 #노래모음 #광고없음
 
 댓글 안달면 탈모옴^_^',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,26,0,'nO1mbK62xrk');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (106,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (106,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다.
 
 #Playlist #플레이리스트 #노동요',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,34,0,'7loLjL5nOHI');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (107,'머릿속이 복잡한 여름밤, 편안하게 듣기 좋은 노래 모음 | PLAYLIST','https://youtu.be/F-o1wmQ1AKA','본 콘텐츠의 ''일부''는 워너뮤직의 지원을 받아 제작되었습니다.
@@ -523,7 +593,7 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 
 멜론에서 듣기 : http://kko.to/UZ7-jivYB
 
-노래추천 
+노래추천
 contact7969@gmail.com',to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,23,0,'7exOT6FIKkE');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (111,'???????? 이거 들으면서 여행갈래??? 신나는 감성힙합/R&B | 박재범, pH-1, 크러쉬, BIG Naughty, DPR LIVE','https://youtu.be/JP4ufXYyaFw','[Track List] ???
 
@@ -571,16 +641,16 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 ▶? 모든 음원은 직접 연주한 음원입니다.
 ▶? 저희 음악을 사용해서 영상을 업로드 하시는 분들은 출처와 링크를 남겨주세요. 감사합니다 :)
 
-   ?Business Contact 
+   ?Business Contact
     ??E-mail : Monkeysounddesign@gmail.com',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,26,0,'86gToHFkbiU');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (115,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (115,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요.
 あなたの心を?にさせてくれる "BeiGe Mellow"です。今日も幸せな一日を過ごしてください',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,34,1,'_dn5vYN2GWY');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (117,'| playlist | 재즈 피아노와 비트, Kiefer의 노래들','https://youtu.be/qHIcmiduyQY','도시를 감싸는 그루비한 재즈 피아노 연주곡
 
-좋아하는 음악을 함께 들어요.  
+좋아하는 음악을 함께 들어요.
 An ode to all the things we love.
 
-본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다. 
+본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다.
 Ode Studio는 플레이리스트를 통해 수익을 창출하지 않으며 모든 수익은 아티스트에게 돌아갑니다.
 
 #플레이리스트 #Kiefer #키퍼
@@ -597,7 +667,7 @@ http://www.iMBC.com/broad/tv/ent/hang...
 WAVVE
 https://www.wavve.com/player/vod?prog...',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,23,0,'8UEZoc6QCwU');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (120,'당신은 언제 어디서나 공부합니까? 밥을 먹으면서 책을 읽나요? | 3 hour lofi hiphop mix / lofi study / chill beats','https://youtu.be/oaIJNOqY1oQ','Listen to this: (?´?`?):
-Rainy Days ? Music to put you in a better mood 
+Rainy Days ? Music to put you in a better mood
 ?https://youtu.be/V2Hcp8Wmcak
 Dreamscape & Lofi Chill - Calm & Chill Lofi Music for Study , Coding , Work
 ?https://youtu.be/Db-oA_9eYeY',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,26,0,'oaIJNOqY1oQ');
@@ -651,7 +721,7 @@ This video is not monetized.
 
 contact: play.lucete@gmail.com
 #찰리푸스 #찰리푸스노래모음 #팝송플리 #플레이리스트 #노래추천 #팝송추천',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,23,3,'LeiKlmvd6KI');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (127,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (127,'[Playlist] 일하면서 조용히 틀어놓기 좋은 노래모음 플레이리스트 l 광고없는 음악모음 2시간30분','https://youtu.be/7loLjL5nOHI','해당 영상은 ''플렉스엠''의 제작비 지원으로 만들어진 영상입니다.
 
 #Playlist #플레이리스트 #노동요',to_date('22/08/15','RR/MM/DD'),null,'127.0.0.1',null,34,1,'7loLjL5nOHI');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (130,'[Playlist] 이런거 들을 계절이 왔다 이말이야 l 초여름 드라이브 할 때 틀기 좋은 노래모음 플레이리스트 아직은 광고없음 ?','https://youtu.be/wOjnJYAn1uk','엄마 사랑해 내가 자주 보러 못가서 미안해',to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,34,3,'wOjnJYAn1uk');
@@ -698,16 +768,16 @@ Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DA
 ▶? 모든 음원은 직접 연주한 음원입니다.
 ▶? 저희 음악을 사용해서 영상을 업로드 하시는 분들은 출처와 링크를 남겨주세요. 감사합니다 :)
 
-   ?Business Contact 
+   ?Business Contact
     ??E-mail : Monkeysounddesign@gmail.com',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,26,54,'86gToHFkbiU');
-Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (136,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요. 
+Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (136,'미술관에 온 듯?여유롭고 클래식한 피아노 연주곡','https://youtu.be/_dn5vYN2GWY','당신의 마음을 편안하게 만들어주는 ''베이지멜로우''입니다. 오늘도 행복한 하루 보내세요.
 あなたの心を?にさせてくれる "BeiGe Mellow"です。今日も幸せな一日を過ごしてください',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,34,43,'_dn5vYN2GWY');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (138,'| playlist | 재즈 피아노와 비트, Kiefer의 노래들','https://youtu.be/qHIcmiduyQY','도시를 감싸는 그루비한 재즈 피아노 연주곡
 
-좋아하는 음악을 함께 들어요.  
+좋아하는 음악을 함께 들어요.
 An ode to all the things we love.
 
-본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다. 
+본 플레이리스트는 Ode Studio가 직접 고른 노래들과 사진으로 만들어졌습니다.
 Ode Studio는 플레이리스트를 통해 수익을 창출하지 않으며 모든 수익은 아티스트에게 돌아갑니다.
 
 #플레이리스트 #Kiefer #키퍼
@@ -715,8 +785,8 @@ Ode Studio는 플레이리스트를 통해 수익을 창출하지 않으며 모�
 Image | majesticjournal',to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,26,75,'qHIcmiduyQY');
 Insert into POST (POST_ID,POST_TITLE,POST_URL,POST_CONTENT,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,MEM_ID,HIT,URL_ID) values (141,'[??????s?] 내가 사랑한 시간, 싱그러운 여름 끝을 즐기는 방법 ?','https://youtu.be/DQtfTTs4ZBk','[????? ???? X 민플리??????s?]
 
-이번엔 롯데마트와 함께 
-여름이 떠나기 전에 꼭 들어보면 좋을 
+이번엔 롯데마트와 함께
+여름이 떠나기 전에 꼭 들어보면 좋을
 Late SUMMER 플레이리스트를 준비했어요 ????
 
 더운 날씨에 지칠 때도 있었지만
@@ -727,72 +797,55 @@ Late SUMMER 플레이리스트를 준비했어요 ????
 이 플리를 듣고 계신
 모든 분들께 드리는 깜짝 선물 ?
 롯데마트가 3천원 할인 쿠폰을 쏩니닷 ?(???)?',to_date('22/08/22','RR/MM/DD'),null,'127.0.0.1',null,44,319,'DQtfTTs4ZBk');
---------------------------------------------------------
---  DDL for Index SYS_C007132
---------------------------------------------------------
 
-  CREATE UNIQUE INDEX "SYS_C007132" ON "POST" ("POST_ID") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  Constraints for Table POST
 --------------------------------------------------------
 
-  ALTER TABLE "POST" ADD PRIMARY KEY ("POST_ID")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "POST" MODIFY ("REGIST_IP" NOT NULL ENABLE);
-  ALTER TABLE "POST" MODIFY ("REGIST_DATE" NOT NULL ENABLE);
-  ALTER TABLE "POST" MODIFY ("POST_CONTENT" NOT NULL ENABLE);
-  ALTER TABLE "POST" MODIFY ("POST_URL" NOT NULL ENABLE);
-  ALTER TABLE "POST" MODIFY ("POST_TITLE" NOT NULL ENABLE);
-  ALTER TABLE "POST" MODIFY ("POST_ID" NOT NULL ENABLE);
+--  ALTER TABLE POST ADD PRIMARY KEY (POST_ID);
+--  ALTER TABLE POST MODIFY (REGIST_IP NOT NULL ENABLE);
+--  ALTER TABLE POST MODIFY (REGIST_DATE NOT NULL ENABLE);
+--  ALTER TABLE POST MODIFY (POST_CONTENT NOT NULL ENABLE);
+--  ALTER TABLE POST MODIFY (POST_URL NOT NULL ENABLE);
+--  ALTER TABLE POST MODIFY (POST_TITLE NOT NULL ENABLE);
+--  ALTER TABLE POST MODIFY (POST_ID NOT NULL ENABLE);
 --------------------------------------------------------
 --  Ref Constraints for Table POST
 --------------------------------------------------------
 
-  ALTER TABLE "POST" ADD CONSTRAINT "FK_MEMBER" FOREIGN KEY ("MEM_ID")
-	  REFERENCES "MEMBER" ("MEM_ID") ENABLE;
-	  
-	  
+--  ALTER TABLE POST ADD CONSTRAINT FK_MEMBER FOREIGN KEY (MEM_ID)
+--	  REFERENCES MEMBER (MEM_ID) ENABLE;
+
+
 --------------------------------------------------------
 --  DDL for Table CMT
 --------------------------------------------------------
 
-  CREATE TABLE "CMT" 
-   (	"CMT_ID" NUMBER(11,0), 
-	"CMT_CONTENT" VARCHAR2(300 BYTE), 
-	"POST_ID" NUMBER(11,0), 
-	"MEM_ID" NUMBER(11,0), 
-	"REGIST_DATE" DATE, 
-	"UPDATE_DATE" DATE, 
-	"REGIST_IP" VARCHAR2(50 BYTE), 
-	"UPDATE_IP" VARCHAR2(50 BYTE), 
-	"CMT_REF" NUMBER(11,0), 
-	"CMT_STEP" NUMBER(11,0), 
-	"CMT_LEVEL" NUMBER(11,0), 
-	"REF_MEM_NAME" VARCHAR2(50 BYTE)
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+--  CREATE TABLE CMT
+--   (	CMT_ID NUMBER(11,0),
+--	CMT_CONTENT VARCHAR2(300 BYTE),
+--	POST_ID NUMBER(11,0),
+--	MEM_ID NUMBER(11,0),
+--	REGIST_DATE DATE,
+--	UPDATE_DATE DATE,
+--	REGIST_IP VARCHAR2(50 BYTE),
+--	UPDATE_IP VARCHAR2(50 BYTE),
+--	CMT_REF NUMBER(11,0),
+--	CMT_STEP NUMBER(11,0),
+--	CMT_LEVEL NUMBER(11,0),
+--	REF_MEM_NAME VARCHAR2(50 BYTE)
+--   );
 REM INSERTING into CMT
 SET DEFINE OFF;
-Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (19,'대댓글',54,3,to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,19,0,0,null);
+Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (232,'ㅎㅎ하이ㅎㅎ',162,56,to_date('22/08/27','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),'0:0:0:0:0:0:0:1','0:0:0:0:0:0:0:1',232,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (21,'댓글~',53,23,to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,21,0,0,null);
-Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (20,'flower댓글',53,3,to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,20,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (22,'댓글~',53,23,to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,22,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (23,'댓글~',53,23,to_date('22/08/18','RR/MM/DD'),null,'127.0.0.1',null,23,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (48,'댓글1',65,23,to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,48,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (104,'2',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,104,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (50,'댓글3',65,23,to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,50,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (51,'댓글4',65,23,to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,51,0,0,null);
-Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (16,'ㅇㄹ',54,3,to_date('22/08/16','RR/MM/DD'),null,'0:0:0:0:0:0:0:1',null,16,0,0,null);
+Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (234,'안녕하세요!',162,23,to_date('22/08/27','RR/MM/DD'),null,'0:0:0:0:0:0:0:1',null,234,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (52,'댓글5',65,23,to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,52,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (53,'댓글1의답글',65,23,to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,48,1,1,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (54,'댓글1의답글2',65,23,to_date('22/08/19','RR/MM/DD'),null,'127.0.0.1',null,48,2,1,null);
@@ -807,7 +860,7 @@ Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIS
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (108,'6',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,108,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (109,'7',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,109,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (124,'답글1',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,102,1,1,null);
-Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (111,'9',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,111,0,0,null);
+Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (111,'9',141,23,to_date('22/08/23','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),'127.0.0.1','0:0:0:0:0:0:0:1',111,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (114,'댓글이지롱',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,114,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (115,'d',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,104,1,1,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (125,'답글2',141,23,to_date('22/08/23','RR/MM/DD'),null,'127.0.0.1',null,102,2,2,null);
@@ -877,52 +930,38 @@ Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIS
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (228,'ㅈ',136,23,to_date('22/08/25','RR/MM/DD'),null,'0:0:0:0:0:0:0:1',null,228,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (229,'ㄷ',136,23,to_date('22/08/25','RR/MM/DD'),null,'0:0:0:0:0:0:0:1',null,229,0,0,null);
 Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (230,'ㅋㅋ',136,23,to_date('22/08/25','RR/MM/DD'),null,'0:0:0:0:0:0:0:1',null,229,1,1,'flower');
---------------------------------------------------------
---  DDL for Index SYS_C007167
---------------------------------------------------------
+Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (235,'웅 하이 ㅎㅎ',162,23,to_date('22/08/27','RR/MM/DD'),null,'0:0:0:0:0:0:0:1',null,232,2,1,'minji');
+Insert into CMT (CMT_ID,CMT_CONTENT,POST_ID,MEM_ID,REGIST_DATE,UPDATE_DATE,REGIST_IP,UPDATE_IP,CMT_REF,CMT_STEP,CMT_LEVEL,REF_MEM_NAME) values (236,'웅 하이 ㅎㅎ 의 답글! 수정함!',162,23,to_date('22/08/27','RR/MM/DD'),to_date('22/08/27','RR/MM/DD'),'0:0:0:0:0:0:0:1','0:0:0:0:0:0:0:1',232,3,2,'hello');
 
-  CREATE UNIQUE INDEX "SYS_C007167" ON "CMT" ("CMT_ID") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  Constraints for Table CMT
 --------------------------------------------------------
 
-  ALTER TABLE "CMT" MODIFY ("POST_ID" NOT NULL ENABLE);
-  ALTER TABLE "CMT" ADD PRIMARY KEY ("CMT_ID")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "CMT" MODIFY ("REGIST_IP" NOT NULL ENABLE);
-  ALTER TABLE "CMT" MODIFY ("REGIST_DATE" NOT NULL ENABLE);
-  ALTER TABLE "CMT" MODIFY ("CMT_CONTENT" NOT NULL ENABLE);
+--  ALTER TABLE CMT MODIFY (POST_ID NOT NULL ENABLE);
+--  ALTER TABLE CMT ADD PRIMARY KEY (CMT_ID);
+--  ALTER TABLE CMT MODIFY (REGIST_IP NOT NULL ENABLE);
+--  ALTER TABLE CMT MODIFY (REGIST_DATE NOT NULL ENABLE);
+--  ALTER TABLE CMT MODIFY (CMT_CONTENT NOT NULL ENABLE);
 --------------------------------------------------------
 --  Ref Constraints for Table CMT
 --------------------------------------------------------
 
-  ALTER TABLE "CMT" ADD CONSTRAINT "FK_MEMID" FOREIGN KEY ("MEM_ID")
-	  REFERENCES "MEMBER" ("MEM_ID") ON DELETE CASCADE ENABLE;
-  ALTER TABLE "CMT" ADD CONSTRAINT "FK_POSTID" FOREIGN KEY ("POST_ID")
-	  REFERENCES "POST" ("POST_ID") ON DELETE CASCADE ENABLE;
-	  
-	  
-	  
+--  ALTER TABLE CMT ADD CONSTRAINT FK_MEMID FOREIGN KEY (MEM_ID)
+--	  REFERENCES MEMBER (MEM_ID) ON DELETE CASCADE ENABLE;
+--  ALTER TABLE CMT ADD CONSTRAINT FK_POSTID FOREIGN KEY (POST_ID)
+--	  REFERENCES POST (POST_ID) ON DELETE CASCADE ENABLE;
+
+
+
 --------------------------------------------------------
 --  DDL for Table LIKE_UP
 --------------------------------------------------------
 
-  CREATE TABLE "LIKE_UP" 
-   (	"LIKE_ID" NUMBER(11,0), 
-	"POST_ID" NUMBER(11,0), 
-	"MEM_ID" NUMBER(11,0)
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+--  CREATE TABLE LIKE_UP
+--   (	LIKE_ID NUMBER(11,0),
+--	POST_ID NUMBER(11,0),
+--	MEM_ID NUMBER(11,0)
+--   );
 REM INSERTING into LIKE_UP
 SET DEFINE OFF;
 Insert into LIKE_UP (LIKE_ID,POST_ID,MEM_ID) values (8,136,23);
@@ -931,96 +970,64 @@ Insert into LIKE_UP (LIKE_ID,POST_ID,MEM_ID) values (9,141,44);
 Insert into LIKE_UP (LIKE_ID,POST_ID,MEM_ID) values (10,138,44);
 Insert into LIKE_UP (LIKE_ID,POST_ID,MEM_ID) values (13,141,23);
 Insert into LIKE_UP (LIKE_ID,POST_ID,MEM_ID) values (15,127,53);
---------------------------------------------------------
---  DDL for Index SYS_C007241
---------------------------------------------------------
 
-  CREATE UNIQUE INDEX "SYS_C007241" ON "LIKE_UP" ("LIKE_ID") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  Constraints for Table LIKE_UP
 --------------------------------------------------------
 
-  ALTER TABLE "LIKE_UP" ADD PRIMARY KEY ("LIKE_ID")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
+--  ALTER TABLE LIKE_UP ADD PRIMARY KEY (LIKE_ID);
 --------------------------------------------------------
 --  Ref Constraints for Table LIKE_UP
 --------------------------------------------------------
 
-  ALTER TABLE "LIKE_UP" ADD CONSTRAINT "FK_MEMID_LIKE" FOREIGN KEY ("MEM_ID")
-	  REFERENCES "MEMBER" ("MEM_ID") ON DELETE CASCADE ENABLE;
-  ALTER TABLE "LIKE_UP" ADD CONSTRAINT "FK_POSTID_LIKE" FOREIGN KEY ("POST_ID")
-	  REFERENCES "POST" ("POST_ID") ON DELETE CASCADE ENABLE;
-	  
-	  
-	  
+--  ALTER TABLE LIKE_UP ADD CONSTRAINT FK_MEMID_LIKE FOREIGN KEY (MEM_ID)
+--	  REFERENCES MEMBER (MEM_ID) ON DELETE CASCADE ENABLE;
+--  ALTER TABLE LIKE_UP ADD CONSTRAINT FK_POSTID_LIKE FOREIGN KEY (POST_ID)
+--	  REFERENCES POST (POST_ID) ON DELETE CASCADE ENABLE;
+
+
+
 --------------------------------------------------------
 --  DDL for Table LIKE_DOWN
 --------------------------------------------------------
 
-  CREATE TABLE "LIKE_DOWN" 
-   (	"LIKE_ID" NUMBER(11,0), 
-	"POST_ID" NUMBER(11,0), 
-	"MEM_ID" NUMBER(11,0)
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+--  CREATE TABLE LIKE_DOWN
+--   (	LIKE_ID NUMBER(11,0),
+--	POST_ID NUMBER(11,0),
+--	MEM_ID NUMBER(11,0)
+--   );
 REM INSERTING into LIKE_DOWN
 SET DEFINE OFF;
 Insert into LIKE_DOWN (LIKE_ID,POST_ID,MEM_ID) values (4,141,23);
 Insert into LIKE_DOWN (LIKE_ID,POST_ID,MEM_ID) values (5,136,23);
 Insert into LIKE_DOWN (LIKE_ID,POST_ID,MEM_ID) values (9,141,53);
---------------------------------------------------------
---  DDL for Index SYS_C007244
---------------------------------------------------------
 
-  CREATE UNIQUE INDEX "SYS_C007244" ON "LIKE_DOWN" ("LIKE_ID") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  Constraints for Table LIKE_DOWN
 --------------------------------------------------------
 
-  ALTER TABLE "LIKE_DOWN" ADD PRIMARY KEY ("LIKE_ID")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
+--  ALTER TABLE LIKE_DOWN ADD PRIMARY KEY (LIKE_ID);
 --------------------------------------------------------
 --  Ref Constraints for Table LIKE_DOWN
 --------------------------------------------------------
 
-  ALTER TABLE "LIKE_DOWN" ADD CONSTRAINT "FK_MEMID_HATE" FOREIGN KEY ("MEM_ID")
-	  REFERENCES "MEMBER" ("MEM_ID") ON DELETE CASCADE ENABLE;
-  ALTER TABLE "LIKE_DOWN" ADD CONSTRAINT "FK_POSTID_HATE" FOREIGN KEY ("POST_ID")
-	  REFERENCES "POST" ("POST_ID") ON DELETE CASCADE ENABLE;
-	  
-	  
-	  
+--  ALTER TABLE LIKE_DOWN ADD CONSTRAINT FK_MEMID_HATE FOREIGN KEY (MEM_ID)
+--	  REFERENCES MEMBER (MEM_ID) ON DELETE CASCADE ENABLE;
+--  ALTER TABLE LIKE_DOWN ADD CONSTRAINT FK_POSTID_HATE FOREIGN KEY (POST_ID)
+--	  REFERENCES POST (POST_ID) ON DELETE CASCADE ENABLE;
+
+
+
 --------------------------------------------------------
 --  DDL for Table FOLLOW
 --------------------------------------------------------
 
-  CREATE TABLE "FOLLOW" 
-   (	"FOLLOW_ID" NUMBER(11,0), 
-	"FOLLOWER" NUMBER(11,0), 
-	"FOLLOWED" NUMBER(11,0), 
-	"FOLLOW_DATE" DATE
-   ) SEGMENT CREATION IMMEDIATE 
-  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 NOCOMPRESS LOGGING
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
+--  CREATE TABLE FOLLOW
+--   (	FOLLOW_ID NUMBER(11,0),
+--	FOLLOWER NUMBER(11,0),
+--	FOLLOWED NUMBER(11,0),
+--	FOLLOW_DATE DATE
+--   );
 REM INSERTING into FOLLOW
 SET DEFINE OFF;
 Insert into FOLLOW (FOLLOW_ID,FOLLOWER,FOLLOWED,FOLLOW_DATE) values (92,53,54,to_date('22/08/25','RR/MM/DD'));
@@ -1033,46 +1040,105 @@ Insert into FOLLOW (FOLLOW_ID,FOLLOWER,FOLLOWED,FOLLOW_DATE) values (7,44,23,to_
 Insert into FOLLOW (FOLLOW_ID,FOLLOWER,FOLLOWED,FOLLOW_DATE) values (91,53,34,to_date('22/08/25','RR/MM/DD'));
 Insert into FOLLOW (FOLLOW_ID,FOLLOWER,FOLLOWED,FOLLOW_DATE) values (69,23,26,to_date('22/08/23','RR/MM/DD'));
 Insert into FOLLOW (FOLLOW_ID,FOLLOWER,FOLLOWED,FOLLOW_DATE) values (93,23,34,to_date('22/08/25','RR/MM/DD'));
---------------------------------------------------------
---  DDL for Index SYS_C007197
---------------------------------------------------------
 
-  CREATE UNIQUE INDEX "SYS_C007197" ON "FOLLOW" ("FOLLOW_ID") 
-  PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM" ;
 --------------------------------------------------------
 --  Constraints for Table FOLLOW
 --------------------------------------------------------
 
-  ALTER TABLE "FOLLOW" ADD PRIMARY KEY ("FOLLOW_ID")
-  USING INDEX PCTFREE 10 INITRANS 2 MAXTRANS 255 COMPUTE STATISTICS 
-  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
-  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1 BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
-  TABLESPACE "SYSTEM"  ENABLE;
-  ALTER TABLE "FOLLOW" MODIFY ("FOLLOW_DATE" NOT NULL ENABLE);
-  ALTER TABLE "FOLLOW" MODIFY ("FOLLOWED" NOT NULL ENABLE);
-  ALTER TABLE "FOLLOW" MODIFY ("FOLLOWER" NOT NULL ENABLE);
-  
-  
-drop sequence cmt_seq;
-drop sequence follow_seq;
-drop sequence like_down_seq;
-drop sequence like_up_seq;
-drop sequence member_seq;
-drop sequence post_seq;
+--  ALTER TABLE FOLLOW ADD PRIMARY KEY (FOLLOW_ID);
+--  ALTER TABLE FOLLOW MODIFY (FOLLOW_DATE NOT NULL ENABLE);
+--  ALTER TABLE FOLLOW MODIFY (FOLLOWED NOT NULL ENABLE);
+--  ALTER TABLE FOLLOW MODIFY (FOLLOWER NOT NULL ENABLE);
 
-create sequence cmt_seq
-start with 250;
-create sequence follow_seq
-start with 250;
-create sequence like_down_seq
-start with 250;
-create sequence like_up_seq
-start with 250;
-create sequence member_seq
-start with 250;
-create sequence post_seq
-start with 250;
-  
+
+----------------------------------------------------------------
+-- (((((((( ALTER문+제약조건 ))))))))
+----------------------------------------------------------------
+
+--------------------------------------------------------
+--  Constraints for Table MEMBER
+--------------------------------------------------------
+
+  ALTER TABLE MEMBER MODIFY (EMAIL NOT NULL ENABLE);
+  ALTER TABLE MEMBER ADD PRIMARY KEY (MEM_ID);
+  ALTER TABLE MEMBER MODIFY (REGIST_IP NOT NULL ENABLE);
+  ALTER TABLE MEMBER MODIFY (REGIST_ID NOT NULL ENABLE);
+  ALTER TABLE MEMBER MODIFY (REGIST_DATE NOT NULL ENABLE);
+  ALTER TABLE MEMBER MODIFY (AUTH NOT NULL ENABLE);
+  ALTER TABLE MEMBER MODIFY (PASSWORD NOT NULL ENABLE);
+  ALTER TABLE MEMBER MODIFY (MEM_NAME NOT NULL ENABLE);
+  ALTER TABLE MEMBER MODIFY (MEM_ID NOT NULL ENABLE);
+
+--------------------------------------------------------
+--  Constraints for Table POST
+--------------------------------------------------------
+
+  ALTER TABLE POST ADD PRIMARY KEY (POST_ID);
+  ALTER TABLE POST MODIFY (REGIST_IP NOT NULL ENABLE);
+  ALTER TABLE POST MODIFY (REGIST_DATE NOT NULL ENABLE);
+  ALTER TABLE POST MODIFY (POST_CONTENT NOT NULL ENABLE);
+  ALTER TABLE POST MODIFY (POST_URL NOT NULL ENABLE);
+  ALTER TABLE POST MODIFY (POST_TITLE NOT NULL ENABLE);
+  ALTER TABLE POST MODIFY (POST_ID NOT NULL ENABLE);
+--------------------------------------------------------
+--  Ref Constraints for Table POST
+--------------------------------------------------------
+
+  ALTER TABLE POST ADD CONSTRAINT FK_MEMBER FOREIGN KEY (MEM_ID)
+	  REFERENCES MEMBER (MEM_ID) ENABLE;
+
+--------------------------------------------------------
+--  Constraints for Table CMT
+--------------------------------------------------------
+
+  ALTER TABLE CMT MODIFY (POST_ID NOT NULL ENABLE);
+  ALTER TABLE CMT ADD PRIMARY KEY (CMT_ID);
+  ALTER TABLE CMT MODIFY (REGIST_IP NOT NULL ENABLE);
+  ALTER TABLE CMT MODIFY (REGIST_DATE NOT NULL ENABLE);
+  ALTER TABLE CMT MODIFY (CMT_CONTENT NOT NULL ENABLE);
+--------------------------------------------------------
+--  Ref Constraints for Table CMT
+--------------------------------------------------------
+
+  ALTER TABLE CMT ADD CONSTRAINT FK_MEMID FOREIGN KEY (MEM_ID)
+	  REFERENCES MEMBER (MEM_ID) ON DELETE CASCADE ENABLE;
+  ALTER TABLE CMT ADD CONSTRAINT FK_POSTID FOREIGN KEY (POST_ID)
+	  REFERENCES POST (POST_ID) ON DELETE CASCADE ENABLE;
+
+--------------------------------------------------------
+--  Constraints for Table LIKE_UP
+--------------------------------------------------------
+
+  ALTER TABLE LIKE_UP ADD PRIMARY KEY (LIKE_ID);
+--------------------------------------------------------
+--  Ref Constraints for Table LIKE_UP
+--------------------------------------------------------
+
+  ALTER TABLE LIKE_UP ADD CONSTRAINT FK_MEMID_LIKE FOREIGN KEY (MEM_ID)
+	  REFERENCES MEMBER (MEM_ID) ON DELETE CASCADE ENABLE;
+  ALTER TABLE LIKE_UP ADD CONSTRAINT FK_POSTID_LIKE FOREIGN KEY (POST_ID)
+	  REFERENCES POST (POST_ID) ON DELETE CASCADE ENABLE;
+
+--------------------------------------------------------
+--  Constraints for Table LIKE_DOWN
+--------------------------------------------------------
+
+  ALTER TABLE LIKE_DOWN ADD PRIMARY KEY (LIKE_ID);
+--------------------------------------------------------
+--  Ref Constraints for Table LIKE_DOWN
+--------------------------------------------------------
+
+  ALTER TABLE LIKE_DOWN ADD CONSTRAINT FK_MEMID_HATE FOREIGN KEY (MEM_ID)
+	  REFERENCES MEMBER (MEM_ID) ON DELETE CASCADE ENABLE;
+  ALTER TABLE LIKE_DOWN ADD CONSTRAINT FK_POSTID_HATE FOREIGN KEY (POST_ID)
+	  REFERENCES POST (POST_ID) ON DELETE CASCADE ENABLE;
+
+--------------------------------------------------------
+--  Constraints for Table FOLLOW
+--------------------------------------------------------
+
+  ALTER TABLE FOLLOW ADD PRIMARY KEY (FOLLOW_ID);
+  ALTER TABLE FOLLOW MODIFY (FOLLOW_DATE NOT NULL ENABLE);
+  ALTER TABLE FOLLOW MODIFY (FOLLOWED NOT NULL ENABLE);
+  ALTER TABLE FOLLOW MODIFY (FOLLOWER NOT NULL ENABLE);
+
